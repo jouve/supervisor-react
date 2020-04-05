@@ -1,0 +1,5 @@
+.mypy_cache
+.vscode
+build
+dist
+supervisor_react.egg-info
