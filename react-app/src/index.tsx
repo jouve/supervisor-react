@@ -1,6 +1,6 @@
 import React, { StrictMode } from "react";
 import { render } from "react-dom";
-import "./index.css";
+import "typeface-roboto";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 

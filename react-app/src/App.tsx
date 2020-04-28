@@ -1,460 +1,441 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  AppBar,
-  Container,
-  CssBaseline,
-  IconButton,
-  Link,
-  Paper,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Toolbar,
-  Typography,
-  Tooltip,
-  Menu,
-  MenuItem,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import IconButton from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableRow from "@material-ui/core/TableRow";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@material-ui/core/Dialog";
 
-import { ClearAll, Loop, PlayArrow, Stop, Replay, Menu as MenuIcon } from "@material-ui/icons";
+import clsx from "clsx";
 
-import "typeface-roboto";
+import CheckIcon from "@material-ui/icons/Check";
+import CloseIcon from "@material-ui/icons/Close";
+import LoopIcon from "@material-ui/icons/Loop";
+import MenuIcon from "@material-ui/icons/Menu";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import ReplayIcon from "@material-ui/icons/Replay";
+import StopIcon from "@material-ui/icons/Stop";
 
-import "./App.css";
+import _ from "lodash";
 
-const xmlrpc = require("node-xmlrpc");
+import { ProcessInfo, ProcessStates, RUNNING_STATES, Supervisor } from "./supervisor";
 
-interface IProcess {
-  description: string;
-  statename: string;
-  name: string;
-  group: string;
-}
-
-interface IGroup {
-  [id: string]: IProcess;
-}
-
-interface IProcesses {
-  [id: string]: IGroup;
-}
-
-interface XmlrpcClient {
-  methodCall: (method: string, params: string[], callback: (error: any, value: any) => void) => void;
-}
-
-interface IStartStopObject {
-  description: string;
-  group: string;
-  name: string;
-  status: number;
-}
-
-class Supervisor {
-  client: XmlrpcClient;
-  processes: IProcesses;
-
-  constructor() {
-    this.client = xmlrpc.createClient({
-      host: window.location.hostname,
-      port: window.location.port,
-      path: "/RPC2",
-    });
-    this.processes = {};
-  }
-
-  methodCall = (method: string, params: string[]): Promise<any> =>
-    new Promise((resolve, reject) =>
-      this.client.methodCall(method, params, (error: string, value: any) => (error ? reject(error) : resolve(value)))
-    );
-
-  getSupervisorVersion = (): Promise<string> => this.methodCall("supervisor.getSupervisorVersion", []);
-
-  getState = () =>
-    this.methodCall("supervisor.getState", []).then(
-      (value: { statecode: number; statename: string }) => value.statename
-    );
-
-  getAllProcessInfo = () =>
-    this.methodCall("supervisor.getAllProcessInfo", []).then((value: IProcess[]) => {
-      const processes: IProcesses = {};
-      value.forEach((e) => {
-        let group = processes[e.group];
-        if (group === undefined) {
-          group = processes[e.group] = {};
-        }
-        group[e.name] = e;
-      });
-      return processes;
-    });
-
-  getProcessInfo = (group: string, name: string): Promise<IProcess> =>
-    this.methodCall("supervisor.getProcessInfo", [`${group}:${name}`]);
-
-  startProcess = (group: string, name: string) =>
-    this.methodCall("supervisor.startProcess", [`${group}:${name}`]).then((value: boolean) =>
-      this.getProcessInfo(group, name)
-    );
-
-  startProcessGroup = (name: string) =>
-    this.methodCall("supervisor.startProcessGroup", [name]).then((value: IStartStopObject[]) =>
-      value.map((e: IStartStopObject) => this.getProcessInfo(name, e.name))
-    );
-
-  startAllProcesses = () =>
-    this.methodCall("supervisor.startAllProcesses", []).then((value: IStartStopObject[]) =>
-      value.map((e) => this.getProcessInfo(e.group, e.name))
-    );
-
-  stopProcess = (group: string, name: string) =>
-    this.methodCall("supervisor.stopProcess", [`${group}:${name}`]).then((value: any) =>
-      this.getProcessInfo(group, name)
-    );
-
-  stopProcessGroup = (name: string) =>
-    this.methodCall("supervisor.stopProcessGroup", [name]).then((value: IStartStopObject[]) =>
-      value.map((e) => this.getProcessInfo(name, e.name))
-    );
-
-  stopAllProcesses = () =>
-    this.methodCall("supervisor.stopAllProcesses", []).then((value: IStartStopObject[]) =>
-      value.map((e) => this.getProcessInfo(e.group, e.name))
-    );
-
-  restartProcess = (group: string, name: string, setProcess: (process: IProcess) => void) =>
-    this.stopProcess(group, name)
-      .then(setProcess)
-      .then((value) => this.startProcess(group, name))
-      .then(setProcess);
-
-  restartProcessGroup = (name: string, setProcess: (process: IProcess | IProcess[]) => void) =>
-    this.stopProcessGroup(name)
-      .then((value) => Promise.all(value))
-      .then(setProcess)
-      .then((value) => this.startProcessGroup(name))
-      .then((value) => Promise.all(value))
-      .then(setProcess);
-
-  restartAllProcesses = (setProcess: (process: IProcess | IProcess[]) => void) =>
-    this.stopAllProcesses()
-      .then((value) => Promise.all(value))
-      .then(setProcess)
-      .then((value) => this.startAllProcesses())
-      .then((value) => Promise.all(value))
-      .then(setProcess);
-
-  clearProcessLogs = (group: string, process: string) =>
-    this.methodCall("supervisor.clearProcessLogs", [`${group}:${process}`]);
-
-  clearAllProcessLogs = () => this.methodCall("supervisor.clearAllProcessLogs", []);
-}
-
-const clsOfStatename = (statename: string) => {
-  if (statename === "RUNNING") {
-    return "statusrunning";
-  } else if (statename === "FATAL" || statename === "BACKOFF") {
-    return "statuserror";
-  } else {
-    return "statusnominal";
-  }
+const TooltipIconButton = (props: any) => {
+  const { title, ...rest } = props;
+  return (
+    <Tooltip title={title}>
+      <Box component="span">
+        <IconButton {...rest} />
+      </Box>
+    </Tooltip>
+  );
 };
 
-const Process = (props: {
-  value: IProcess;
-  supervisor: Supervisor;
-  setProcess: (process: IProcess | IProcess[]) => void;
-}) => (
-  <TableRow>
-    <TableCell />
-    <TableCell>{props.value.name}</TableCell>
-    <TableCell className={clsOfStatename(props.value.statename)}>{props.value.statename}</TableCell>
-    <TableCell>{props.value.description}</TableCell>
-    <TableCell>
-      <Switch
-        checked={props.value.statename === "RUNNING"}
-        onChange={(event) =>
-          props.supervisor[event.target.checked ? "startProcess" : "stopProcess"](
-            props.value.group,
-            props.value.name
-          ).then(props.setProcess)
-        }
-        size="small"
-      />
-      <Tooltip title="restart">
-        <span>
-          <IconButton
-            color="primary"
-            onClick={(e) => props.supervisor.restartProcess(props.value.group, props.value.name, props.setProcess)}
-            disabled={props.value.statename !== "RUNNING"}
-            size="small"
-          >
-            <Loop />
-          </IconButton>
-        </span>
-      </Tooltip>
-      <Tooltip title="Clear Logs">
-        <IconButton
-          color="primary"
-          onClick={(e) => props.supervisor.clearProcessLogs(props.value.group, props.value.name)}
-          size="small"
-        >
-          <ClearAll />
-        </IconButton>
-      </Tooltip>
-    </TableCell>
-    <TableCell>
-      <Link href={`logtail/${props.value.group}:${props.value.name}`}>stdout</Link>&nbsp;
-      <Link href={`logtail/${props.value.group}:${props.value.name}/stderr`}>stderr</Link>
-    </TableCell>
-  </TableRow>
-);
-
-const Group = (props: {
-  value: string;
-  processes: IGroup;
-  supervisor: Supervisor;
-  setProcess: (process: IProcess | IProcess[]) => any;
-}) => (
-  <>
-    <TableRow>
-      <TableCell>{props.value}</TableCell>
-      <TableCell />
-      <TableCell />
-      <TableCell />
-      <TableCell>
-        <Tooltip title="Start Group">
-          <span>
-            <IconButton
-              color="primary"
-              onClick={(e) =>
-                props.supervisor
-                  .stopProcessGroup(props.value)
-                  .then((value) => Promise.all(value))
-                  .then(props.setProcess)
-              }
-              disabled={Object.values(props.processes).reduce<boolean>(
-                (acc, cur) => acc && cur.statename !== "RUNNING",
-                true
-              )}
-              size="small"
-            >
-              <Stop />
-            </IconButton>
-          </span>
-        </Tooltip>
-        <Tooltip title="Stop Group">
-          <span>
-            <IconButton
-              color="primary"
-              onClick={(e) =>
-                props.supervisor
-                  .startProcessGroup(props.value)
-                  .then((value) => Promise.all(value))
-                  .then(props.setProcess)
-              }
-              disabled={Object.values(props.processes).reduce<boolean>(
-                (acc, cur) => acc && cur.statename === "RUNNING",
-                true
-              )}
-              size="small"
-            >
-              <PlayArrow />
-            </IconButton>
-          </span>
-        </Tooltip>
-      </TableCell>
-      <TableCell />
-    </TableRow>
-    {Object.entries(props.processes).map(([name, process]) => (
-      <Process key={name} value={process} supervisor={props.supervisor} setProcess={props.setProcess} />
-    ))}
-  </>
-);
-
-const About = (props: { supervisor: Supervisor }) => {
-  const [version, setVersion] = useState("?");
-  const [state, setState] = useState("?");
+const AboutDialog = (props: any) => {
+  const { supervisor, ...rest } = props;
+  const [version, setVersion] = useState("");
 
   useEffect(() => {
-    props.supervisor.getState().then(setState);
-    props.supervisor.getSupervisorVersion().then(setVersion);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    supervisor.getSupervisorVersion().then(setVersion);
+  }, []);
 
   return (
-    <DialogContent>
-      <DialogTitle>Supervisor-React</DialogTitle>
-      <DialogContentText>
-        With Supervisor {version}, State: {state}
-      </DialogContentText>
-    </DialogContent>
+    <Dialog {...rest}>
+      <DialogTitle>About</DialogTitle>
+      <DialogContent dividers>
+        <ul>
+          <li>supervisor: {version}</li>
+          <li>supervisor-react: 0.1.3</li>
+        </ul>
+      </DialogContent>
+    </Dialog>
+  );
+};
+const FlexTitle = withStyles({ root: { flexGrow: 1 } })(Typography);
+
+const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
+  const [anchorEl, setAnchorEl] = useState(null as (EventTarget & HTMLButtonElement) | null);
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton color="inherit" onClick={(e) => setAnchorEl(e.currentTarget)}>
+            <MenuIcon />
+          </IconButton>
+          <Menu anchorEl={anchorEl} open={anchorEl !== null} onClose={() => setAnchorEl(null)}>
+            <MenuItem onClick={(_e) => supervisor.stopAllProcesses()}>Stop all</MenuItem>
+            <MenuItem onClick={(_e) => supervisor.startAllProcesses()}>Start All</MenuItem>
+            <MenuItem onClick={(_e) => supervisor.restartAllProcesses()}>Restart All</MenuItem>
+            <MenuItem onClick={(_e) => supervisor.clearAllProcessLogs()}>Clear All</MenuItem>
+            <MenuItem
+              onClick={(_e) => {
+                setAnchorEl(null);
+                setOpen(true);
+              }}
+            >
+              About
+            </MenuItem>
+          </Menu>
+          <FlexTitle variant="h5">Supervisor</FlexTitle>
+          <Tooltip title="Reload Supervisor">
+            <IconButton color="inherit" onClick={(e) => supervisor.getAllProcessInfo()}>
+              <ReplayIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      </AppBar>
+      <AboutDialog supervisor={supervisor} open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+};
+
+const ExpansionPanelSummary2 = withStyles({
+  root: {
+    minHeight: 45,
+    padding: 0,
+
+    "&$expanded": {
+      margin: 0,
+      minHeight: 45,
+    },
+  },
+  content: {
+    margin: 0,
+    minHeight: 45,
+    "&$expanded": {
+      margin: 0,
+    },
+  },
+  expanded: {},
+})(ExpansionPanelSummary);
+
+const SummaryRow = withStyles({
+  root: {
+    "& td:nth-child(1)": {
+      width: 140,
+    },
+    "& td:nth-child(2)": {
+      width: 140,
+    },
+    "& td:nth-child(3)": {
+      textAlign: "center",
+      width: 113,
+    },
+    "& td:nth-child(5)": {
+      width: 132,
+    },
+    "& td:nth-child(6)": {
+      width: 113,
+    },
+  },
+})(TableRow);
+
+const GroupState = withStyles(({ palette }) => ({
+  all: { color: palette.success.main },
+  some: { color: palette.success.light },
+  none: { color: palette.warning.light },
+}))(({ running, length, classes }: { running: number; length: number; classes: any }) => (
+  <Box component="span" className={running === length ? classes.all : running === 0 ? classes.none : classes.some}>
+    {running}/{length}
+  </Box>
+));
+
+const ProcessRunning = withStyles(({ palette }) => ({
+  root: {
+    color: palette.success.main,
+  },
+}))(CheckIcon);
+
+const ProcessFatal = withStyles(({ palette }) => ({
+  root: {
+    color: palette.error.main,
+  },
+}))(CloseIcon);
+
+const ProcessStopped = withStyles(({ palette }) => ({
+  root: {
+    color: palette.warning.main,
+  },
+}))(CloseIcon);
+
+const ProcessIcon = ({ process, supervisor }: { process: ProcessInfo; supervisor: Supervisor }) => {
+  const onClick = RUNNING_STATES.includes(process.state) ? supervisor.stopProcess : supervisor.startProcess;
+  return (
+    <Tooltip title={process.name}>
+      <IconButton
+        size="small"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick(process);
+        }}
+      >
+        {RUNNING_STATES.includes(process.state) ? (
+          <ProcessRunning />
+        ) : process.state === ProcessStates.FATAL ? (
+          <ProcessFatal />
+        ) : (
+          <ProcessStopped />
+        )}
+      </IconButton>
+    </Tooltip>
+  );
+};
+
+const GroupSummary = ({
+  value,
+  processes,
+  supervisor,
+}: {
+  value: string;
+  processes: ProcessInfo[];
+  supervisor: Supervisor;
+}) => {
+  const byState = _.assign(
+    { RUNNING: 0, STOPPED: 0 },
+    _.countBy(processes, (e) => (RUNNING_STATES.includes(e.state) ? "RUNNING" : "STOPPED"))
+  );
+
+  return (
+    <ExpansionPanelSummary2>
+      <TableContainer component={Paper} elevation={0}>
+        <Table size="small">
+          <TableBody>
+            <SummaryRow>
+              <TableCell>{value}</TableCell>
+              <TableCell></TableCell>
+              <TableCell>
+                <GroupState running={byState.RUNNING} length={processes.length} />
+              </TableCell>
+              <TableCell>
+                {processes.map((process) => (
+                  <ProcessIcon key={process.name} process={process} supervisor={supervisor} />
+                ))}
+              </TableCell>
+              <TableCell padding="none">
+                <TooltipIconButton
+                  title="Stop Group"
+                  color="primary"
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    supervisor.stopProcessGroup(value);
+                  }}
+                  disabled={byState.RUNNING === 0}
+                >
+                  <StopIcon fontSize="small" />
+                </TooltipIconButton>
+                <TooltipIconButton
+                  title="Start"
+                  color="primary"
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    supervisor.startProcessGroup(value);
+                  }}
+                  disabled={byState.RUNNING === processes.length}
+                >
+                  <PlayArrowIcon fontSize="small" />
+                </TooltipIconButton>
+                <TooltipIconButton
+                  title="Restart"
+                  color="primary"
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    supervisor.restartProcessGroup(value);
+                  }}
+                >
+                  <LoopIcon fontSize="small" />
+                </TooltipIconButton>
+              </TableCell>
+              <TableCell></TableCell>
+            </SummaryRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </ExpansionPanelSummary2>
+  );
+};
+
+const State = withStyles(({ palette }) => ({
+  root: {
+    borderRadius: 6,
+    color: palette.error.contrastText,
+    padding: "2px 4px",
+  },
+  running: {
+    backgroundColor: palette.success.main,
+  },
+  stopped: {
+    backgroundColor: palette.warning.light,
+  },
+  fatal: {
+    backgroundColor: palette.success.main,
+  },
+}))(({ process, classes }: { process: ProcessInfo; classes: any }) => (
+  <Box
+    component="span"
+    className={clsx(
+      classes.root,
+      RUNNING_STATES.includes(process.state)
+        ? classes.running
+        : process.state !== ProcessStates.FATAL
+        ? classes.stopped
+        : classes.fatal
+    )}
+  >
+    {process.statename}
+  </Box>
+));
+
+const DetailRow = withStyles({
+  root: {
+    "& td:nth-child(1)": {
+      width: 140,
+    },
+    "& td:nth-child(2)": {
+      width: 140,
+    },
+    "& td:nth-child(3)": {
+      width: 113,
+    },
+    "& td:nth-child(5)": {
+      width: 132,
+    },
+    "& td:nth-child(6)": {
+      width: 113,
+    },
+  },
+})(TableRow);
+
+const SwitchWrapper = withStyles({
+  root: {
+    display: "inline-block",
+    textAlign: "center",
+    width: 88,
+  },
+})(Box);
+
+//const State = (props: { process: ProcessInfo }) => <Box component="span">{props.process.statename}</Box>;
+const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) => {
+  const process = props.process;
+
+  return (
+    <DetailRow>
+      <TableCell></TableCell>
+      <TableCell>{process.name}</TableCell>
+      <TableCell padding="none" align="center">
+        <State {...props} />
+      </TableCell>
+      <TableCell>{process.description}</TableCell>
+      <TableCell padding="none">
+        <SwitchWrapper component="span">
+          <Switch
+            size="small"
+            checked={RUNNING_STATES.includes(process.state)}
+            onChange={(e) =>
+              (RUNNING_STATES.includes(process.state) ? props.supervisor.stopProcess : props.supervisor.startProcess)(
+                process
+              )
+            }
+          />
+        </SwitchWrapper>
+        <TooltipIconButton
+          title="Restart"
+          color="primary"
+          onClick={(e: any) => props.supervisor.restartProcess(process)}
+        >
+          <LoopIcon fontSize="small" />
+        </TooltipIconButton>
+      </TableCell>
+      <TableCell>
+        <Link href={`logtail/${process.group}:${process.name}`}>stdout</Link>
+        &nbsp;
+        <Link href={`logtail/${process.group}:${process.name}/stderr`}>stderr</Link>
+      </TableCell>
+    </DetailRow>
+  );
+};
+
+const ExpansionPanelDetails2 = withStyles({
+  root: {
+    padding: 0,
+  },
+})(ExpansionPanelDetails);
+
+const GroupDetails = (props: { processes: ProcessInfo[]; supervisor: Supervisor }) => (
+  <ExpansionPanelDetails2>
+    <TableContainer>
+      <Table size="small">
+        <TableBody>
+          {props.processes.map((process) => (
+            <ProcessDetail key={process.name} process={process} {...props} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </ExpansionPanelDetails2>
+);
+
+const ExpansionPanel2 = withStyles({
+  root: {
+    "&$expanded": {
+      margin: 0,
+    },
+    backgroundColor: "unset",
+  },
+  expanded: {},
+})(ExpansionPanel);
+
+const Group = (props: { value: string; processes: ProcessInfo[]; supervisor: Supervisor }) => {
+  return (
+    <ExpansionPanel2 elevation={0}>
+      <GroupSummary {...props} />
+      <GroupDetails {...props} />
+    </ExpansionPanel2>
   );
 };
 
 const App = () => {
-  const [processes, setProcesses] = useState<IProcesses>({});
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
-  const supervisor = new Supervisor();
+  const [processes, setProcesses] = useState([] as ProcessInfo[]);
+  const supervisor = new Supervisor(setProcesses);
 
   useEffect(() => {
-    supervisor.getAllProcessInfo().then(setProcesses);
+    supervisor.getAllProcessInfo();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const setProcess = (process: IProcess | IProcess[]) => {
-    const newp = Object.entries(processes).reduce((acc: IProcesses, [name, group]) => {
-      acc[name] = group;
-      return acc;
-    }, {});
-    if (Array.isArray(process)) {
-      process.reduce((acc, cur) => {
-        acc[cur.group][cur.name] = cur;
-        return acc;
-      }, newp);
-    } else {
-      newp[process.group][process.name] = process;
-    }
-    setProcesses(newp);
-  };
-
-  const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleOpenAbout = () => {
-    handleClose();
-    setOpen(true);
-  };
-
-  const handleCloseAbout = () => {
-    setOpen(false);
-  };
 
   return (
     <>
       <CssBaseline />
       <Container fixed>
-        <Dialog open={open} onClose={handleCloseAbout}>
-          <About supervisor={supervisor} />
-        </Dialog>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton onClick={handleMenu} color="inherit">
-              <MenuIcon />
-            </IconButton>
-            <Menu open={anchorEl !== null} onClose={handleClose} anchorEl={anchorEl}>
-              <MenuItem
-                onClick={(e) => {
-                  handleClose();
-                  supervisor
-                    .stopAllProcesses()
-                    .then((value) => Promise.all(value))
-                    .then(setProcess);
-                }}
-                disabled={Object.values(processes).reduce<boolean>(
-                  (acc0, group) =>
-                    acc0 &&
-                    Object.values(group).reduce<boolean>(
-                      (acc1, process) => acc1 && process.statename !== "RUNNING",
-                      true
-                    ),
-                  true
-                )}
-              >
-                Stop all
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  handleClose();
-                  supervisor
-                    .startAllProcesses()
-                    .then((value) => Promise.all(value))
-                    .then(setProcess);
-                }}
-                disabled={Object.values(processes).reduce<boolean>(
-                  (acc0, group) =>
-                    acc0 &&
-                    Object.values(group).reduce<boolean>(
-                      (acc1, process) => acc1 && process.statename === "RUNNING",
-                      true
-                    ),
-                  true
-                )}
-              >
-                Start All
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  handleClose();
-                  supervisor.restartAllProcesses(setProcess);
-                }}
-              >
-                Restart All
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  handleClose();
-                  supervisor.clearAllProcessLogs();
-                }}
-              >
-                Clear All
-              </MenuItem>
-
-              <MenuItem onClick={handleOpenAbout}>About</MenuItem>
-            </Menu>
-            <Typography variant="h6" style={{ flexGrow: 1 }}>
-              Supervisor
-            </Typography>
-            <Tooltip title="Reload Supervisor">
-              <span>
-                <IconButton
-                  color="inherit"
-                  onClick={(e) => supervisor.getAllProcessInfo().then(setProcesses)}
-                  size="small"
-                >
-                  <Replay />
-                </IconButton>
-              </span>
-            </Tooltip>
-          </Toolbar>
-        </AppBar>
-        <TableContainer component={Paper}>
-          <Table className="sr-cell" size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Group</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>State</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Actions</TableCell>
-                <TableCell>Logs</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.entries(processes).map(([group, processes]) => (
-                <Group
-                  key={group}
-                  value={group}
-                  processes={processes}
-                  supervisor={supervisor}
-                  setProcess={setProcess}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <SupervisorAppBar supervisor={supervisor} />
+        {_(processes)
+          .groupBy("group")
+          .toPairs()
+          .sortBy()
+          .map(([group, processes]) => (
+            <Group key={group} value={group} processes={_.sortBy(processes, "name")} supervisor={supervisor} />
+          ))
+          .value()}
       </Container>
     </>
   );
