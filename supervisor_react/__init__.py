@@ -71,7 +71,7 @@ class LogtailHandler(SupervisorHandler):
         # AsyncHTTPClient adds 'Connection: close' by default
         # it causes supervisor to close the connection, and so to not stream it
         with contextlib.closing(AsyncHTTPClient()) as client:
-            fut = client.fetch(
+            fut = client.fetch(  # pylint: disable=no-member
                 urljoin(self.supervisor, path),
                 streaming_callback=streaming_callback,
                 header_callback=header_callback,
@@ -81,7 +81,7 @@ class LogtailHandler(SupervisorHandler):
             )
             while True:
                 try:
-                    yield WaitIterator(cond.wait(), fut).next()
+                    yield WaitIterator(cond.wait(), fut).next()  # noqa: B305
                 except HTTPStreamClosedError:  # connection to supervisor closed
                     pass
                 try:

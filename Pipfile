@@ -5,15 +5,16 @@ verify_ssl = true
 
 [dev-packages]
 bandit = "*"
-flake8 = "*"
+flake8-bugbear = "*"
 ipython = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
+supervisor = "*"
+tox = "*"
+twine = "*"
 unify = "*"
 yapf = "*"
-supervisor = "*"
-twine = "*"
 
 [packages]
 supervisor-react = {editable = true,path = "."}

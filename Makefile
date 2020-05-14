@@ -11,11 +11,12 @@ lint:
 	bandit *.py supervisor_react/*.py
 	pylint *.py supervisor_react/*.py
 
-dist: supervisor_react/build
+dist:
 	python setup.py bdist_wheel
 
 upload:
 	twine upload dist/supervisor_react-*-py2.py3-none-any.whl
+
 clean:
 	make -C react-app clean
 	rm -rf build dist supervisor_react/build
