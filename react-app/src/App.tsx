@@ -57,7 +57,7 @@ const AboutDialog = (props: any) => {
 
   useEffect(() => {
     supervisor.getSupervisorVersion().then(setVersion);
-  }, []);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Dialog {...rest}>
