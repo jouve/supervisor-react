@@ -289,7 +289,7 @@ const State = withStyles(({ palette }) => ({
     backgroundColor: palette.warning.light,
   },
   fatal: {
-    backgroundColor: palette.success.main,
+    backgroundColor: palette.error.main,
   },
 }))(({ process, classes }: { process: ProcessInfo; classes: any }) => (
   <Box
@@ -298,9 +298,9 @@ const State = withStyles(({ palette }) => ({
       classes.root,
       RUNNING_STATES.includes(process.state)
         ? classes.running
-        : process.state !== ProcessStates.FATAL
+        : (process.state !== ProcessStates.FATAL
         ? classes.stopped
-        : classes.fatal
+        : classes.fatal)
     )}
   >
     {process.statename}

@@ -16,8 +16,9 @@ twine = "*"
 unify = "*"
 yapf = "*"
 
-[packages]
-supervisor-react = {editable = true,path = "."}
+[packages.supervisor-react]
+editable = true
+path = "."
 
 [requires]
 python_version = "3"
