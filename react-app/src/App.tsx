@@ -113,17 +113,17 @@ const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
 
 const ExpansionPanelSummary2 = withStyles({
   root: {
-    minHeight: 45,
+    minHeight: 43,
     padding: 0,
 
     "&$expanded": {
       margin: 0,
-      minHeight: 45,
+      minHeight: 43,
     },
   },
   content: {
     margin: 0,
-    minHeight: 45,
+    minHeight: 43,
     "&$expanded": {
       margin: 0,
     },
@@ -235,6 +235,7 @@ const GroupSummary = ({
               </TableCell>
               <TableCell padding="none">
                 <TooltipIconButton
+                  size="small"
                   title="Stop Group"
                   color="primary"
                   onClick={(e: any) => {
@@ -246,7 +247,8 @@ const GroupSummary = ({
                   <StopIcon fontSize="small" />
                 </TooltipIconButton>
                 <TooltipIconButton
-                  title="Start"
+                  size="small"
+                  title="Start Group"
                   color="primary"
                   onClick={(e: any) => {
                     e.stopPropagation();
@@ -257,7 +259,8 @@ const GroupSummary = ({
                   <PlayArrowIcon fontSize="small" />
                 </TooltipIconButton>
                 <TooltipIconButton
-                  title="Restart"
+                  size="small"
+                  title="Restart Group"
                   color="primary"
                   onClick={(e: any) => {
                     e.stopPropagation();
@@ -331,7 +334,7 @@ const SwitchWrapper = withStyles({
   root: {
     display: "inline-block",
     textAlign: "center",
-    width: 88,
+    width: 52,
   },
 })(Box);
 
@@ -360,6 +363,7 @@ const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) 
           />
         </SwitchWrapper>
         <TooltipIconButton
+          size="small"
           title="Restart"
           color="primary"
           onClick={(e: any) => props.supervisor.restartProcess(process)}
