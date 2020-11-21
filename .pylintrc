@@ -1,1 +1,15 @@
-setup.cfg
+[pylint.MESSAGES CONTROL]
+disable =
+    abstract-method,
+    arguments-differ,
+    attribute-defined-outside-init,
+    invalid-name,
+    line-too-long,
+    missing-class-docstring,
+    missing-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+
+[pylint.FORMAT]
+max-line-length = 120
+

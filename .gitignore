@@ -4,3 +4,4 @@
 build
 dist
 supervisor_react.egg-info
+__pycache__

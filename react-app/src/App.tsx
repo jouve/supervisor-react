@@ -134,14 +134,14 @@ const ExpansionPanelSummary2 = withStyles({
 const SummaryRow = withStyles({
   root: {
     "& td:nth-child(1)": {
-      width: 140,
+      width: 200,
     },
     "& td:nth-child(2)": {
-      width: 140,
+      width: 120,
     },
     "& td:nth-child(3)": {
       textAlign: "center",
-      width: 113,
+      width: 73,
     },
     "& td:nth-child(5)": {
       width: 132,
@@ -313,13 +313,13 @@ const State = withStyles(({ palette }) => ({
 const DetailRow = withStyles({
   root: {
     "& td:nth-child(1)": {
-      width: 140,
+      width: 120,
     },
     "& td:nth-child(2)": {
-      width: 140,
+      width: 200,
     },
     "& td:nth-child(3)": {
-      width: 113,
+      width: 73,
     },
     "& td:nth-child(5)": {
       width: 132,

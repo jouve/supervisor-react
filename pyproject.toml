@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "supervisor-react"
+version = "0.1.6"
+description = "A web interface for supervisor"
+authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
+license = "GPL-3.0-only"
+readme = "README.md"
+repository = "https://github.com/jouve/supervisor-react"
+include = ["supervisor_react/build/*"]
+
+[tool.poetry.scripts]
+supervisor-react = "supervisor_react:main"
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+tornado = "*"
+
+[tool.poetry.dev-dependencies]
+bandit = "*"
+flake8-bugbear = "*"
+ipython = "*"
+isort = "*"
+mypy = "*"
+pylint = "*"
+supervisor = "*"
+tox = "*"
+twine = "*"
+unify = "*"
+yapf = "*"
+
+[tool.isort]
+line_length = 120
