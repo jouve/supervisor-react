@@ -16,7 +16,9 @@ $SUDO docker run -i -t \
   -v poetry-artifacts:/root/.cache/pypoetry/artifacts \
   -v poetry-cache:/root/.cache/pypoetry/cache \
   -v $PWD:/srv \
-  -w /srv $(head -n1 Dockerfile | sed -n -e 's/FROM //p') sh -x -c "
+  -w /srv \
+  alpine:3.12.1 \
+  sh -x -c "
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
