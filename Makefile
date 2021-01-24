@@ -20,13 +20,10 @@ clean:
 	make -C react-app clean
 	rm -rf build dist supervisor_react/build
 
-update: update2 update3 react-app-update
-
-update2:
-	./update2.sh
+update: update3 react-app-update
 
 update3:
-	./update3.sh
+	./update.sh
 
 react-app-update:
 	react-app/update.sh
@@ -34,3 +31,5 @@ react-app-update:
 supervisor_react/build:
 	make -C react-app
 	cp -r react-app/build supervisor_react/build
+
+.PHONY: update

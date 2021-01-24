@@ -17,7 +17,9 @@ tornado = "*"
 
 [tool.poetry.dev-dependencies]
 bandit = "*"
+flake8-assertive = "*"
 flake8-bugbear = "*"
+flake8-comprehensions = "*"
 ipython = "*"
 isort = "*"
 mypy = "*"

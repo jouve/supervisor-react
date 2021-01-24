@@ -17,7 +17,7 @@ $SUDO docker run -i -t \
   -v poetry-cache:/root/.cache/pypoetry/cache \
   -v $PWD:/srv \
   -w /srv \
-  alpine:3.12.1 \
+  alpine:3.13.0 \
   sh -x -c "
 set -e
 apk add --no-cache alpine-conf
@@ -27,5 +27,7 @@ python3 -m venv /usr/share/poetry
 /usr/share/poetry/bin/pip install --upgrade pip
 /usr/share/poetry/bin/pip install wheel
 /usr/share/poetry/bin/pip install poetry
+pwd
+ls
 /usr/share/poetry/bin/poetry lock
 "
