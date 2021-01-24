@@ -39,4 +39,4 @@ jobs:
         python -m pip install poetry
         poetry install
     - name: Lint with flake8
-      run: ${{ matrix.check-command }}
+      run: poetry run ${{ matrix.check-command }}
