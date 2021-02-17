@@ -6,11 +6,14 @@ else
   SUDO=
 fi
 
-docker volume create apk-cache || true
-docker volume create yarn-cache || true
+if docker container inspect cache_cache_1 &>/dev/null; then
+  cache=--volumes-from=cache_cache_1
+else
+  cache=
+fi
+
 $SUDO docker run \
-  -v yarn-cache:/usr/local/share/.cache/yarn \
-  -v apk-cache:/var/cache/apk \
+  $cache \
   -v "$(readlink -f "$(dirname "$0")")":/usr/share/supervisor-react \
   -w /srv \
   alpine:3.13.0 \

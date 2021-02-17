@@ -13,7 +13,10 @@ supervisor-react = "supervisor_react:main"
 
 [tool.poetry.dependencies]
 python = ">=3.6"
-tornado = "*"
+httpx = "*"
+starlette = "*"
+uvicorn = "*"
+aiofiles = "*"
 
 [tool.poetry.dev-dependencies]
 bandit = "*"
