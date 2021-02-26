@@ -11,26 +11,24 @@ from uvicorn import run
 
 
 async def logtail(request):
-    async def content():
-        async with AsyncClient(timeout=60) as client:
-            async with client.stream(
-                request.scope['method'],
-                urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
-            ) as response:
-                async for chunk in response.aiter_raw():
-                    yield chunk
-
-    return StreamingResponse(content())
+    response = await request.app.state.client.send(
+        request.app.state.client.build_request(
+            request.scope['method'],
+            urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
+        ),
+        stream=True,
+        timeout=300
+    )
+    return StreamingResponse(response.aiter_raw(), response.status_code, response.headers, background=response.aclose)
 
 
 async def rpc2(request):
-    async with AsyncClient() as client:
-        response = await client.request(
-            request.method,
-            urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
-            content=await request.body(),
-        )
-        return Response(response.content, response.status_code, response.headers)
+    response = await request.app.state.client.request(
+        request.method,
+        urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
+        content=await request.body(),
+    )
+    return Response(response.content, response.status_code, response.headers)
 
 
 def main():
@@ -50,4 +48,5 @@ def main():
         ],
     )
     app.state.SUPERVISOR_URL = args.supervisor
+    app.state.client = AsyncClient()
     run(app, port=args.port, log_level=['info', 'debug', 'trace'][min(args.verbose, 2)])
