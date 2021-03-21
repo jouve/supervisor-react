@@ -33,6 +33,7 @@ async def rpc2(request):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-H', '--host', default='127.0.0.1', help='default: %(default)s')
     parser.add_argument('-p', '--port', type=int, default=8888, help='default: %(default)s')
     parser.add_argument('-s', '--supervisor', default='http://localhost:9001', help='default: %(default)s')
     parser.add_argument('-v', '--verbose', action='count', default=0)
@@ -49,4 +50,4 @@ def main():
     )
     app.state.SUPERVISOR_URL = args.supervisor
     app.state.client = AsyncClient()
-    run(app, port=args.port, log_level=['info', 'debug', 'trace'][min(args.verbose, 2)])
+    run(app, host=args.host, port=args.port, log_level=['info', 'debug', 'trace'][min(args.verbose, 2)])

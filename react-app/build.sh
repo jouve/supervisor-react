@@ -12,15 +12,12 @@ else
   cache=
 fi
 
-docker volume rm node_modules || true
-docker volume create node_modules
 $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -v node_nodumes:/srv/node_modules \
   -w /srv \
-  alpine:3.13.0 \
-  sh -x -c '
+  alpine:3.13.2 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
