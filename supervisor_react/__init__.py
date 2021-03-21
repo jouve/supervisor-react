@@ -17,7 +17,7 @@ async def logtail(request):
             urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
         ),
         stream=True,
-        timeout=300
+        timeout=300,
     )
     return StreamingResponse(response.aiter_raw(), response.status_code, response.headers, background=response.aclose)
 
