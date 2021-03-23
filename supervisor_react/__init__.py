@@ -13,19 +13,18 @@ from uvicorn import run
 async def logtail(request):
     response = await request.app.state.client.send(
         request.app.state.client.build_request(
-            request.scope['method'],
-            urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
+            request.method,
+            request.scope['path'],
         ),
         stream=True,
         timeout=300,
     )
     return StreamingResponse(response.aiter_raw(), response.status_code, response.headers, background=response.aclose)
 
-
 async def rpc2(request):
     response = await request.app.state.client.request(
         request.method,
-        urljoin(request.app.state.SUPERVISOR_URL, request.scope['path']),
+        request.scope['path'],
         content=await request.body(),
     )
     return Response(response.content, response.status_code, response.headers)
@@ -48,6 +47,5 @@ def main():
             Mount('/', StaticFiles(directory=os.path.join(os.path.dirname(__file__), 'build'), html=True)),
         ],
     )
-    app.state.SUPERVISOR_URL = args.supervisor
-    app.state.client = AsyncClient()
+    app.state.client = AsyncClient(base_url=args.supervisor)
     run(app, host=args.host, port=args.port, log_level=['info', 'debug', 'trace'][min(args.verbose, 2)])
