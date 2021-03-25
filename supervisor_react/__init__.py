@@ -21,6 +21,7 @@ async def logtail(request):
     )
     return StreamingResponse(response.aiter_raw(), response.status_code, response.headers, background=response.aclose)
 
+
 async def rpc2(request):
     response = await request.app.state.client.request(
         request.method,
