@@ -1,6 +1,5 @@
 import argparse
 import os
-from urllib.parse import urljoin
 
 from httpx import AsyncClient
 from starlette.applications import Starlette
