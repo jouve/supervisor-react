@@ -1,5 +1,5 @@
 {
-  "name": "react-app",
+  "name": "supervisor-app",
   "version": "0.1.3",
   "private": true,
   "proxy": "http://127.0.0.1:9001",
