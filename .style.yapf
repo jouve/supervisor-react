@@ -1,4 +1,0 @@
-[style]
-coalesce_brackets = false
-column_limit = 120
-dedent_closing_brackets = False

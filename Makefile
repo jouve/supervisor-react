@@ -1,14 +1,14 @@
 all: dist
 
 fmt:
-	isort *.py supervisor_react/*.py
-	unify -i *.py supervisor_react/*.py
-	yapf -i *.py supervisor_react/*.py
+	unify --in-place --recursive supervisor_react
+	isort --recursive supervisor_react
+	black supervisor_react
 
 lint:
-	flake8 *.py supervisor_react/*.py
-	bandit *.py supervisor_react/*.py
-	pylint *.py supervisor_react/*.py
+	flake8 --append-config pyproject.toml supervisor_react/*.py
+	bandit supervisor_react/*.py
+	pylint supervisor_react/*.py
 
 dist: supervisor_react/build
 	poetry build

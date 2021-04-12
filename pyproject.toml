@@ -12,7 +12,7 @@ include = ["supervisor_react/build/**/*"]
 supervisor-react = "supervisor_react:main"
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.6,<4.0"
 httpx = "*"
 starlette = "*"
 uvicorn = "*"
@@ -20,19 +20,34 @@ aiofiles = "*"
 
 [tool.poetry.dev-dependencies]
 bandit = "*"
+black = "*"
 flake8-assertive = "*"
 flake8-bugbear = "*"
 flake8-comprehensions = "*"
 ipython = "*"
-isort = "*"
+isort = ">=5"
 mypy = "*"
 pylint = "*"
 supervisor = "*"
 unify = "*"
-yapf = "*"
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
 
 [tool.isort]
 line_length = 120
+profile = "black"
+
+[tool.pylint.messages_control]
+disable = "missing-function-docstring,missing-module-docstring"
+
+[tool.pylint.format]
+max-line-length = "120"
+
+[flake8]
+extend-ignore = "E203, W503"
+max-line-length = 120
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
