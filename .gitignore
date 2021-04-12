@@ -1,7 +1,8 @@
 .mypy_cache
+.scannerwork
 .tox
 .vscode
+__pycache__
 build
 dist
-supervisor_react.egg-info
-__pycache__
+*.egg-info
