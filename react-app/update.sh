@@ -20,10 +20,9 @@ $SUDO docker run \
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache make nodejs yarn python2
+apk add --no-cache npm yarn
 cp /usr/share/supervisor-react/package.json .
-node --version
-yarn install
-yarn upgrade
+npm install --package-lock-only
+yarn import
 cp yarn.lock /usr/share/supervisor-react
 '
