@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Python package
 
 on:
@@ -18,8 +15,8 @@ jobs:
     strategy:
       matrix:
         python-version:
-        - 3.8
-        - 3.9
+        - '3.8'
+        - '3.9'
 
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +34,7 @@ jobs:
     - name: unify
       run: poetry run unify -r -c supervisor_react
     - name: yapf
-      run: poetry run black --check .'
+      run: poetry run black --check supervisor_react
     - name: flake8
       run: poetry run flake8 supervisor_react
     - name: pylint

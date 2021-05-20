@@ -16,7 +16,7 @@ $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/usr/share/supervisor-react \
   -w /srv \
-  alpine:3.13.4 sh -x -c '
+  alpine:3.13.5 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
