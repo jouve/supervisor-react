@@ -37,7 +37,7 @@ jobs:
     - name: unify
       run: poetry run unify -r -c supervisor_react
     - name: yapf
-      run: '! poetry run yapf --recursive --diff supervisor_react | grep .'
+      run: poetry run black --check .'
     - name: flake8
       run: poetry run flake8 supervisor_react
     - name: pylint
