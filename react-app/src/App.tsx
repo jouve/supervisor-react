@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -75,7 +75,7 @@ const FlexTitle = withStyles({ root: { flexGrow: 1 } })(Typography);
 
 const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
   const [anchorEl, setAnchorEl] = useState(null as (EventTarget & HTMLButtonElement) | null);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
