@@ -13,9 +13,6 @@ lint:
 dist: supervisor_react/build
 	poetry build
 
-upload:
-	twine upload dist/supervisor_react-*-py2.py3-none-any.whl
-
 clean:
 	make -C react-app clean
 	rm -rf build dist supervisor_react/build

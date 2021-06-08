@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supervisor-react"
-version = "0.1.10"
+version = "0.1.11"
 description = "A web interface for supervisor"
 authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
