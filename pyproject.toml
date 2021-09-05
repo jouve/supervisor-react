@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supervisor-react"
-version = "0.1.11"
+version = "0.2.0"
 description = "A web interface for supervisor"
 authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
@@ -27,6 +27,7 @@ flake8-comprehensions = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
+semgrep = "*"
 supervisor = "*"
 unify = "*"
 

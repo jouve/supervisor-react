@@ -21,7 +21,7 @@ $SUDO docker run \
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache make nodejs yarn python2
-yarn install
-yarn build
+apk add --no-cache make nodejs npm python2
+npx yarn install
+npx yarn build
 '

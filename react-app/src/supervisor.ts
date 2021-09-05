@@ -72,11 +72,11 @@ export class Supervisor {
 
   getAllProcessInfo = async () => {
     try {
-      this.setProcesses(await this.methodCall("supervisor.getAllProcessInfo", []))
+      this.setProcesses(await this.methodCall("supervisor.getAllProcessInfo", []));
     } catch {
-      this.setProcesses([])
+      this.setProcesses([]);
     }
-  }
+  };
 
   startProcess = async (process: ProcessInfo) => {
     await this.methodCall("supervisor.startProcess", [`${process.group}:${process.name}`]);

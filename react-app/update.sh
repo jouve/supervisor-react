@@ -1,6 +1,7 @@
 #!/bin/bash -x
 
-if ! test -w /var/run/docker.sock; then
+if ! test -w /var/run/docker.sock
+then
   SUDO=sudo
 else
   SUDO=
@@ -20,9 +21,9 @@ $SUDO docker run \
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache npm yarn
+apk add --no-cache npm
 cp /usr/share/supervisor-react/package.json .
-npm install --package-lock-only
-yarn import
+npx npm install --package-lock-only
+npx yarn import
 cp yarn.lock /usr/share/supervisor-react
 '

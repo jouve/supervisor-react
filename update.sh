@@ -16,4 +16,4 @@ $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -w /srv \
-  jouve/poetry:1.1.6-alpine3.13.5 poetry lock
+  jouve/poetry:1.1.7-alpine3.14.1 poetry lock

@@ -1,18 +1,34 @@
 import { useEffect, useState } from "react";
 
-import { withStyles } from "@material-ui/core/styles";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
+import _ from "lodash";
+
 import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
+import CheckIcon from "@material-ui/icons/Check";
+import CloseIcon from "@material-ui/icons/Close";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
+import LoopIcon from "@material-ui/icons/Loop";
 import Menu from "@material-ui/core/Menu";
+import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import ReplayIcon from "@material-ui/icons/Replay";
+import StopIcon from "@material-ui/icons/Stop";
 import Switch from "@material-ui/core/Switch";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -22,21 +38,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import Dialog from "@material-ui/core/Dialog";
-
-import clsx from "clsx";
-
-import CheckIcon from "@material-ui/icons/Check";
-import CloseIcon from "@material-ui/icons/Close";
-import LoopIcon from "@material-ui/icons/Loop";
-import MenuIcon from "@material-ui/icons/Menu";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import ReplayIcon from "@material-ui/icons/Replay";
-import StopIcon from "@material-ui/icons/Stop";
-
-import _ from "lodash";
 
 import { ProcessInfo, ProcessStates, RUNNING_STATES, Supervisor } from "./supervisor";
 
@@ -57,7 +58,7 @@ const AboutDialog = (props: any) => {
 
   useEffect(() => {
     supervisor.getSupervisorVersion().then(setVersion);
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Dialog {...rest}>
@@ -71,7 +72,6 @@ const AboutDialog = (props: any) => {
     </Dialog>
   );
 };
-const FlexTitle = withStyles({ root: { flexGrow: 1 } })(Typography);
 
 const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
   const [anchorEl, setAnchorEl] = useState(null as (EventTarget & HTMLButtonElement) | null);
@@ -98,7 +98,9 @@ const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
               About
             </MenuItem>
           </Menu>
-          <FlexTitle variant="h5">Supervisor</FlexTitle>
+          <Typography variant="h5" sx={{ flexGrow: 1 }}>
+            Supervisor
+          </Typography>
           <Tooltip title="Reload Supervisor">
             <IconButton color="inherit" onClick={(e) => supervisor.getAllProcessInfo()}>
               <ReplayIcon />
@@ -110,75 +112,6 @@ const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
     </>
   );
 };
-
-const ExpansionPanelSummary2 = withStyles({
-  root: {
-    minHeight: 43,
-    padding: 0,
-
-    "&$expanded": {
-      margin: 0,
-      minHeight: 43,
-    },
-  },
-  content: {
-    margin: 0,
-    minHeight: 43,
-    "&$expanded": {
-      margin: 0,
-    },
-  },
-  expanded: {},
-})(ExpansionPanelSummary);
-
-const SummaryRow = withStyles({
-  root: {
-    "& td:nth-child(1)": {
-      width: 200,
-    },
-    "& td:nth-child(2)": {
-      width: 120,
-    },
-    "& td:nth-child(3)": {
-      textAlign: "center",
-      width: 73,
-    },
-    "& td:nth-child(5)": {
-      width: 132,
-    },
-    "& td:nth-child(6)": {
-      width: 113,
-    },
-  },
-})(TableRow);
-
-const GroupState = withStyles(({ palette }) => ({
-  all: { color: palette.success.main },
-  some: { color: palette.success.light },
-  none: { color: palette.warning.light },
-}))(({ running, length, classes }: { running: number; length: number; classes: any }) => (
-  <Box component="span" className={running === length ? classes.all : running === 0 ? classes.none : classes.some}>
-    {running}/{length}
-  </Box>
-));
-
-const ProcessRunning = withStyles(({ palette }) => ({
-  root: {
-    color: palette.success.main,
-  },
-}))(CheckIcon);
-
-const ProcessFatal = withStyles(({ palette }) => ({
-  root: {
-    color: palette.error.main,
-  },
-}))(CloseIcon);
-
-const ProcessStopped = withStyles(({ palette }) => ({
-  root: {
-    color: palette.warning.main,
-  },
-}))(CloseIcon);
 
 const ProcessIcon = ({ process, supervisor }: { process: ProcessInfo; supervisor: Supervisor }) => {
   const onClick = RUNNING_STATES.includes(process.state) ? supervisor.stopProcess : supervisor.startProcess;
@@ -192,11 +125,11 @@ const ProcessIcon = ({ process, supervisor }: { process: ProcessInfo; supervisor
         }}
       >
         {RUNNING_STATES.includes(process.state) ? (
-          <ProcessRunning />
+          <CheckIcon sx={{ color: "success.main" }} />
         ) : process.state === ProcessStates.FATAL ? (
-          <ProcessFatal />
+          <CloseIcon sx={{ color: "error.main" }} />
         ) : (
-          <ProcessStopped />
+          <CloseIcon sx={{ color: "warning.main" }} />
         )}
       </IconButton>
     </Tooltip>
@@ -218,22 +151,46 @@ const GroupSummary = ({
   );
 
   return (
-    <ExpansionPanelSummary2>
+    <AccordionSummary
+      sx={{
+        "&.Mui-expanded": {
+          minHeight: 0,
+        },
+        "& .MuiAccordionSummary-content": {
+          margin: 0,
+        },
+        "& .MuiAccordionSummary-content.Mui-expanded": {
+          margin: 0,
+        },
+      }}
+    >
       <TableContainer component={Paper} elevation={0}>
         <Table size="small">
           <TableBody>
-            <SummaryRow>
-              <TableCell>{value}</TableCell>
-              <TableCell></TableCell>
-              <TableCell>
-                <GroupState running={byState.RUNNING} length={processes.length} />
+            <TableRow>
+              <TableCell width={200}>{value}</TableCell>
+              <TableCell width={120}></TableCell>
+              <TableCell align="center" width={73}>
+                <Box
+                  component="span"
+                  sx={{
+                    color:
+                      byState.RUNNING === processes.length
+                        ? "success.main"
+                        : byState.RUNNING === 0
+                        ? "error.main"
+                        : "warning.main",
+                  }}
+                >
+                  {byState.RUNNING}/{processes.length}
+                </Box>
               </TableCell>
               <TableCell>
                 {processes.map((process) => (
                   <ProcessIcon key={process.name} process={process} supervisor={supervisor} />
                 ))}
               </TableCell>
-              <TableCell padding="none">
+              <TableCell padding="none" width={132}>
                 <TooltipIconButton
                   size="small"
                   title="Stop Group"
@@ -270,88 +227,39 @@ const GroupSummary = ({
                   <LoopIcon fontSize="small" />
                 </TooltipIconButton>
               </TableCell>
-              <TableCell></TableCell>
-            </SummaryRow>
+              <TableCell width={113}></TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-    </ExpansionPanelSummary2>
+    </AccordionSummary>
   );
 };
 
-const State = withStyles(({ palette }) => ({
-  root: {
-    borderRadius: 6,
-    color: palette.error.contrastText,
-    padding: "2px 4px",
-  },
-  running: {
-    backgroundColor: palette.success.main,
-  },
-  stopped: {
-    backgroundColor: palette.warning.light,
-  },
-  fatal: {
-    backgroundColor: palette.error.main,
-  },
-}))(({ process, classes }: { process: ProcessInfo; classes: any }) => (
-  <Box
-    component="span"
-    className={clsx(
-      classes.root,
-      RUNNING_STATES.includes(process.state)
-        ? classes.running
-        : (process.state !== ProcessStates.FATAL
-        ? classes.stopped
-        : classes.fatal)
-    )}
-  >
-    {process.statename}
-  </Box>
-));
-
-const DetailRow = withStyles({
-  root: {
-    "& td:nth-child(1)": {
-      width: 120,
-    },
-    "& td:nth-child(2)": {
-      width: 200,
-    },
-    "& td:nth-child(3)": {
-      width: 73,
-    },
-    "& td:nth-child(5)": {
-      width: 132,
-    },
-    "& td:nth-child(6)": {
-      width: 113,
-    },
-  },
-})(TableRow);
-
-const SwitchWrapper = withStyles({
-  root: {
-    display: "inline-block",
-    textAlign: "center",
-    width: 52,
-  },
-})(Box);
-
-//const State = (props: { process: ProcessInfo }) => <Box component="span">{props.process.statename}</Box>;
 const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) => {
   const process = props.process;
 
   return (
-    <DetailRow>
-      <TableCell></TableCell>
-      <TableCell>{process.name}</TableCell>
-      <TableCell padding="none" align="center">
-        <State {...props} />
+    <TableRow>
+      <TableCell width={120}></TableCell>
+      <TableCell width={200}>{process.name}</TableCell>
+      <TableCell padding="none" align="center" width={73}>
+        <Box
+          component="span"
+          color={
+            RUNNING_STATES.includes(process.state)
+              ? "success.main"
+              : process.state === ProcessStates.FATAL
+              ? "error.main"
+              : "warning.main"
+          }
+        >
+          {process.statename}
+        </Box>
       </TableCell>
       <TableCell>{process.description}</TableCell>
-      <TableCell padding="none">
-        <SwitchWrapper component="span">
+      <TableCell padding="none" width={132}>
+        <Box component="span">
           <Switch
             size="small"
             checked={RUNNING_STATES.includes(process.state)}
@@ -361,7 +269,7 @@ const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) 
               )
             }
           />
-        </SwitchWrapper>
+        </Box>
         <TooltipIconButton
           size="small"
           title="Restart"
@@ -371,23 +279,17 @@ const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) 
           <LoopIcon fontSize="small" />
         </TooltipIconButton>
       </TableCell>
-      <TableCell>
+      <TableCell width={113}>
         <Link href={`logtail/${process.group}:${process.name}`}>stdout</Link>
         &nbsp;
         <Link href={`logtail/${process.group}:${process.name}/stderr`}>stderr</Link>
       </TableCell>
-    </DetailRow>
+    </TableRow>
   );
 };
 
-const ExpansionPanelDetails2 = withStyles({
-  root: {
-    padding: 0,
-  },
-})(ExpansionPanelDetails);
-
 const GroupDetails = (props: { processes: ProcessInfo[]; supervisor: Supervisor }) => (
-  <ExpansionPanelDetails2>
+  <AccordionDetails sx={{ paddingTop: 0, paddingBottom: 0 }}>
     <TableContainer>
       <Table size="small">
         <TableBody>
@@ -397,25 +299,22 @@ const GroupDetails = (props: { processes: ProcessInfo[]; supervisor: Supervisor 
         </TableBody>
       </Table>
     </TableContainer>
-  </ExpansionPanelDetails2>
+  </AccordionDetails>
 );
-
-const ExpansionPanel2 = withStyles({
-  root: {
-    "&$expanded": {
-      margin: 0,
-    },
-    backgroundColor: "unset",
-  },
-  expanded: {},
-})(ExpansionPanel);
 
 const Group = (props: { value: string; processes: ProcessInfo[]; supervisor: Supervisor }) => {
   return (
-    <ExpansionPanel2 elevation={0}>
+    <Accordion
+      elevation={0}
+      sx={{
+        "&.Mui-expanded": {
+          margin: 0,
+        },
+      }}
+    >
       <GroupSummary {...props} />
       <GroupDetails {...props} />
-    </ExpansionPanel2>
+    </Accordion>
   );
 };
 
