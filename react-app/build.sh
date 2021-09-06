@@ -17,7 +17,7 @@ $SUDO docker run \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -v node_nodumes:/srv/node_modules \
   -w /srv \
-  alpine:3.13.5 sh -x -c '
+  alpine:3.14.2 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk

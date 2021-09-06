@@ -17,7 +17,7 @@ export enum ProcessStates {
 
 export const STOPPED_STATES = [ProcessStates.STOPPED, ProcessStates.EXITED, ProcessStates.FATAL, ProcessStates.UNKNOWN];
 
-export const RUNNING_STATES = [ProcessStates.RUNNING, ProcessStates.BACKOFF, ProcessStates.STARTING];
+export const RUNNING_STATES = [ProcessStates.STARTING, ProcessStates.RUNNING, ProcessStates.BACKOFF];
 
 export enum SupervisorStates {
   FATAL = 2,

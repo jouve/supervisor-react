@@ -32,12 +32,19 @@ async def rpc2(request):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-V', '--version', action='version', version='0.2.1')
+    parser.add_argument(
+        '-v',
+        '--verbose',
+        action='count',
+        default=0,
+        help='Verbose mode. Multiple -v options increase the verbosity. The maximum is 2.',
+    )
     parser.add_argument('-H', '--host', default='127.0.0.1', help='Bind socket to this host. default: %(default)s')
     parser.add_argument('-p', '--port', type=int, default=8888, help='Bind socket to this port. default: %(default)s')
     parser.add_argument(
         '-s', '--supervisor', default='http://localhost:9001', help='Supervisor rpc interface. default: %(default)s'
     )
-    parser.add_argument('-v', '--verbose', action='count', default=0)
     args = parser.parse_args()
 
     app = Starlette(

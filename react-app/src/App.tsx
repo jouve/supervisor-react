@@ -66,7 +66,7 @@ const AboutDialog = (props: any) => {
       <DialogContent dividers>
         <ul>
           <li>supervisor: {version}</li>
-          <li>supervisor-react: 0.1.3</li>
+          <li>supervisor-react: 0.2.1</li>
         </ul>
       </DialogContent>
     </Dialog>
@@ -146,9 +146,13 @@ const GroupSummary = ({
   supervisor: Supervisor;
 }) => {
   const byState = _.assign(
-    { RUNNING: 0, STOPPED: 0 },
-    _.countBy(processes, (e) => (RUNNING_STATES.includes(e.state) ? "RUNNING" : "STOPPED"))
+    { RUNNING: 0, STOPPED: 0, FATAL: 0 },
+    _.countBy(processes, (e) =>
+      RUNNING_STATES.includes(e.state) ? "RUNNING" : e.state === ProcessStates.FATAL ? "FATAL" : "STOPPED"
+    )
   );
+
+  console.log(byState);
 
   return (
     <AccordionSummary
@@ -175,10 +179,10 @@ const GroupSummary = ({
                   component="span"
                   sx={{
                     color:
-                      byState.RUNNING === processes.length
-                        ? "success.main"
-                        : byState.RUNNING === 0
+                      byState.FATAL > 0
                         ? "error.main"
+                        : byState.RUNNING === processes.length
+                        ? "success.main"
                         : "warning.main",
                   }}
                 >

@@ -1,6 +1,6 @@
 {
   "name": "supervisor-react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "proxy": "http://127.0.0.1:9001",
   "dependencies": {
