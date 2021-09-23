@@ -24,6 +24,5 @@ setup-apkcache /var/cache/apk
 apk add --no-cache npm
 cp /usr/share/supervisor-react/package.json .
 npx npm install --package-lock-only
-npx yarn import
-cp yarn.lock /usr/share/supervisor-react
+cp package-lock.json /usr/share/supervisor-react
 '

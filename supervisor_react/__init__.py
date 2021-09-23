@@ -10,8 +10,9 @@ from uvicorn import run
 
 
 async def logtail(request):
-    response = await request.app.state.client.send(
-        request.app.state.client.build_request(
+    client = request.app.state.client
+    response = await client.send(
+        client.build_request(
             request.method,
             request.scope['path'],
         ),
