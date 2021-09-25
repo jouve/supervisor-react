@@ -45,9 +45,6 @@ disable = "missing-function-docstring,missing-module-docstring"
 [tool.pylint.format]
 max-line-length = "120"
 
-[flake8]
-max-line-length = 120
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
