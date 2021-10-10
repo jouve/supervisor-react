@@ -1,9 +1,11 @@
 #!/bin/bash -x
 
-if ! test -w /var/run/docker.sock; then
-  SUDO=sudo
-else
-  SUDO=
+if [ "$(basename "$(readlink -f "$(which docker)")")" != podman ]; then
+  if ! test -w /var/run/docker.sock; then
+    SUDO=sudo
+  else
+    SUDO=
+  fi
 fi
 
 if docker container inspect cache_cache_1 &>/dev/null; then
@@ -16,4 +18,4 @@ $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -w /srv \
-  jouve/poetry:1.1.8-alpine3.14.2 poetry lock
+  jouve/poetry:1.1.10-alpine3.14.2 poetry lock
