@@ -12,7 +12,7 @@ include = ["supervisor_react/build/**/*"]
 supervisor-react = "supervisor_react:main"
 
 [tool.poetry.dependencies]
-python = ">=3.6,<4.0"
+python = "^3.6,>=3.6.2"
 aiofiles = "*"
 httpx = "*"
 starlette = "*"
