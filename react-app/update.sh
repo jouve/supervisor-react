@@ -22,7 +22,7 @@ $SUDO docker run \
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache npm
+apk add --no-cache nodejs-current npm
 cp /usr/share/supervisor-react/package.json .
 npx npm install --package-lock-only
 cp package-lock.json /usr/share/supervisor-react

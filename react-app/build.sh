@@ -23,7 +23,7 @@ $SUDO docker run \
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache make nodejs npm python2
+apk add --no-cache make nodejs-current npm python2
 npx npm install
 npx npm run build
 '
