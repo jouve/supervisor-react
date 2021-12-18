@@ -18,6 +18,7 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "node-xmlrpc": "*",
+    "prettier": "*",
     "react": "*",
     "react-dom": "*",
     "react-scripts": "*",

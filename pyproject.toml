@@ -27,7 +27,6 @@ flake8-comprehensions = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
-semgrep = "*"
 supervisor = "*"
 unify = "*"
 

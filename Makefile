@@ -9,8 +9,9 @@ lint:
 	flake8 --append-config pyproject.toml supervisor_react/*.py
 	bandit supervisor_react/*.py
 	pylint supervisor_react/*.py
-	semgrep --config=p/ci supervisor_react
-	semgrep --config=p/security-audit supervisor_react
+	mypy supervisor_react
+	#semgrep --config=p/ci supervisor_react
+	#semgrep --config=p/security-audit supervisor_react
 
 dist: supervisor_react/build
 	poetry build
