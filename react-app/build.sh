@@ -17,13 +17,16 @@ fi
 $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
-  -v node_nodumes:/srv/node_modules \
-  -w /srv \
+  -w /opt \
+  -it \
   alpine:3.15.0 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache make nodejs-current npm python2
-npx npm install
-npx npm run build
+apk add --no-cache make nodejs-current npm python2 rsync
+rsync -a /srv/ /opt
+npm install
+npm run build || sh
+rm -rf /srv/build
+cp -r build /srv/build
 '

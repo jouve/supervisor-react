@@ -6,7 +6,6 @@
   "dependencies": {
     "@emotion/react": "*",
     "@emotion/styled": "*",
-    "@fontsource/roboto": "*",
     "@mui/icons-material": "*",
     "@mui/material": "*",
     "@testing-library/jest-dom": "*",
@@ -21,8 +20,8 @@
     "prettier": "*",
     "react": "*",
     "react-dom": "*",
-    "react-scripts": "*",
-    "typescript": "*",
+    "react-scripts": "4.x",
+    "typescript": "4.4.x",
     "web-vitals": "*"
   },
   "scripts": {

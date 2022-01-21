@@ -6,7 +6,7 @@ authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
 readme = "README.md"
 repository = "https://github.com/jouve/supervisor-react"
-include = ["supervisor_react/build/**/*"]
+include = ["supervisor_react/statics/**/*"]
 
 [tool.poetry.scripts]
 supervisor-react = "supervisor_react:main"

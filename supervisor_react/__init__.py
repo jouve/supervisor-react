@@ -1,34 +1,35 @@
-import argparse
-import os
+from argparse import ArgumentParser
 
 from httpx import AsyncClient
 from starlette.applications import Starlette
+from starlette.background import BackgroundTask
+from starlette.requests import Request
 from starlette.responses import Response, StreamingResponse
 from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 from uvicorn import run  # type: ignore
 
 
-async def logtail(request):
-    client = request.app.state.client
+async def logtail(request: Request):
+    client: AsyncClient = request.app.state.client
     response = await client.send(
         client.build_request(
             request.method,
             request.scope['path'],
         ),
         stream=True,
-        timeout=300,
     )
     return StreamingResponse(
         response.aiter_raw(),
         response.status_code,
         response.headers,
-        background=response.aclose,
+        background=BackgroundTask(response.aclose),
     )
 
 
-async def rpc2(request):
-    response = await request.app.state.client.request(
+async def rpc2(request: Request):
+    client: AsyncClient = request.app.state.client
+    response = await client.request(
         request.method,
         request.scope['path'],
         content=await request.body(),
@@ -37,7 +38,7 @@ async def rpc2(request):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser()
     parser.add_argument('-V', '--version', action='version', version='0.2.3')
     parser.add_argument(
         '-v',
@@ -59,7 +60,7 @@ def main():
             Route('/RPC2', rpc2, methods=['POST']),
             Route('/logtail/{path:path}', logtail),
             Route('/mainlogtail', logtail),
-            Mount('/', StaticFiles(directory=os.path.join(os.path.dirname(__file__), 'build'), html=True)),
+            Mount('/', StaticFiles(packages=[__package__], html=True)),
         ],
     )
     app.state.client = AsyncClient(base_url=args.supervisor)

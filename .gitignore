@@ -1,8 +1,8 @@
+*.egg-info
 .mypy_cache
 .scannerwork
 .tox
 .vscode
 __pycache__
-build
 dist
-*.egg-info
+statics

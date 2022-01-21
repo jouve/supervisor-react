@@ -13,12 +13,12 @@ lint:
 	#semgrep --config=p/ci supervisor_react
 	#semgrep --config=p/security-audit supervisor_react
 
-dist: supervisor_react/build
+dist: supervisor_react/statics
 	poetry build
 
 clean:
 	make -C react-app clean
-	rm -rf build dist supervisor_react/build
+	rm -rf build dist supervisor_react/statics
 
 update: update-py update-node
 
@@ -28,8 +28,9 @@ update-py:
 update-node:
 	react-app/update.sh
 
-supervisor_react/build:
+supervisor_react/statics:
 	make -C react-app
-	cp -r react-app/build supervisor_react/build
+	rm -rf supervisor_react/statics
+	cp -r react-app/build supervisor_react/statics
 
 .PHONY: update
