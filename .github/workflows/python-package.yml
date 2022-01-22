@@ -17,7 +17,7 @@ jobs:
         python-version:
         - '3.9'
         - '3.10'
-        #- '3.11-dev'
+        - '3.11-dev'
 
     steps:
     - uses: actions/checkout@v2
@@ -30,13 +30,17 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry
         poetry install
-    - name: isort
-      run: poetry run isort --check-only supervisor_react
     - name: unify
       run: poetry run unify --recursive --check-only supervisor_react
+    - name: isort
+      run: poetry run isort --check-only supervisor_react
     - name: black
       run: poetry run black --check supervisor_react
     - name: flake8
       run: poetry run flake8 supervisor_react
+    - name: bandit
+      run: poetry run bandit -r supervisor_react
     - name: pylint
       run: poetry run pylint supervisor_react
+    - name: mypy
+      run: poetry run mypy supervisor_react
