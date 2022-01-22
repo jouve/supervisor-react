@@ -1,8 +1,5 @@
-const xmlrpc = require("node-xmlrpc");
 
-export interface XmlrpcClient {
-  methodCall: (method: string, params: any[], callback: Function) => void;
-}
+import {XmlRpcClient} from "./xmlrpc";
 
 export enum ProcessStates {
   STOPPED = 0,
@@ -49,22 +46,16 @@ export interface ProcessInfo {
 }
 
 export class Supervisor {
-  client: XmlrpcClient;
+  client: XmlRpcClient;
   setProcesses: any;
 
   constructor(setProcesses: any) {
-    this.client = xmlrpc.createClient({
-      host: window.location.hostname,
-      port: window.location.port,
-      path: "/RPC2",
-    });
+    this.client = new XmlRpcClient(`${window.location.origin}/RPC2`)
     this.setProcesses = setProcesses;
   }
 
   methodCall = (method: string, params: string[]): Promise<any> =>
-    new Promise((resolve, reject) =>
-      this.client.methodCall(method, params, (error: string, value: any) => (error ? reject(error) : resolve(value)))
-    );
+    this.client.methodCall(method, params)
 
   getSupervisorVersion = () => this.methodCall("supervisor.getSupervisorVersion", []) as Promise<string>;
 

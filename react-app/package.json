@@ -11,18 +11,20 @@
     "@testing-library/jest-dom": "*",
     "@testing-library/react": "*",
     "@testing-library/user-event": "*",
+    "@trysound/sax": "*",
     "@types/jest": "*",
     "@types/lodash": "*",
     "@types/node": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
-    "node-xmlrpc": "*",
+    "byte-base64": "*",
     "prettier": "*",
     "react": "*",
     "react-dom": "*",
-    "react-scripts": "4.x",
+    "react-scripts": "*",
     "typescript": "4.4.x",
-    "web-vitals": "*"
+    "web-vitals": "*",
+    "xmlbuilder2": "*"
   },
   "scripts": {
     "start": "react-scripts start",

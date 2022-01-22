@@ -148,8 +148,6 @@ const GroupSummary = ({
     )
   );
 
-  console.log(byState);
-
   return (
     <AccordionSummary
       sx={{
