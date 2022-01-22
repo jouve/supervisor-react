@@ -16,14 +16,14 @@ fi
 
 $SUDO docker run \
   $cache \
-  -v "$(readlink -f "$(dirname "$0")")":/usr/share/supervisor-react \
-  -w /srv \
+  -v "$(readlink -f "$(dirname "$0")")":/srv \
+  -w /opt \
   alpine:3.15.0 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk
-apk add --no-cache nodejs-current npm
-cp /usr/share/supervisor-react/package.json .
-npx npm install --package-lock-only
-cp package-lock.json /usr/share/supervisor-react
+apk add --no-cache npm
+cp /srv/package.json .
+npm install --package-lock-only
+cp package-lock.json /srv
 '

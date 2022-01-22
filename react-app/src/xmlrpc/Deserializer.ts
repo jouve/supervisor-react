@@ -149,9 +149,6 @@ export class Deserializer {
         case "STRUCT":
           this._endStruct(data);
           break;
-        case "BASE64":
-          this._endBase64(data);
-          break;
         case "DATETIME.ISO8601":
           this._endDateTime(data);
           break;
@@ -246,12 +243,6 @@ export class Deserializer {
       struct[key] = items[i + 1];
     }
     this._stack.splice(mark, this._stack.length - mark, struct);
-    this._value = false;
-  };
-
-  private _endBase64 = (data: string): void => {
-    const buffer = Buffer.from(data, "base64");
-    this._push(buffer);
     this._value = false;
   };
 

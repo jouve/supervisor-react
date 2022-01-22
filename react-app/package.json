@@ -17,12 +17,11 @@
     "@types/node": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
-    "byte-base64": "*",
     "prettier": "*",
     "react": "*",
     "react-dom": "*",
     "react-scripts": "*",
-    "typescript": "4.4.x",
+    "typescript": "*",
     "web-vitals": "*",
     "xmlbuilder2": "*"
   },

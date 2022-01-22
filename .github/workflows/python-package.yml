@@ -33,8 +33,8 @@ jobs:
     - name: isort
       run: poetry run isort --check-only supervisor_react
     - name: unify
-      run: poetry run unify -r -c supervisor_react
-    - name: yapf
+      run: poetry run unify --recursive --check-only supervisor_react
+    - name: black
       run: poetry run black --check supervisor_react
     - name: flake8
       run: poetry run flake8 supervisor_react

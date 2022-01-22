@@ -1,4 +1,3 @@
-import { bytesToBase64 } from "byte-base64";
 import { create as createXml } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces";
 
@@ -100,9 +99,6 @@ function serializeValue(value: XmlRpcValue, xml: XMLBuilder) {
           } else if (current.value instanceof Date) {
             appendDatetime(current.value, valueNode);
             stack.pop();
-          } else if (Buffer.isBuffer(current.value)) {
-            appendBuffer(current.value, valueNode);
-            stack.pop();
           } else {
             if (Array.isArray(current.value)) {
               current.xml = valueNode.ele("array").ele("data");
@@ -178,8 +174,4 @@ function appendNumber(value: number, xml: XMLBuilder) {
 
 function appendDatetime(value: Date, xml: XMLBuilder) {
   xml.ele("dateTime.iso8601").txt(dateFormatter.encodeIso8601(value));
-}
-
-function appendBuffer(value: Uint8Array, xml: XMLBuilder) {
-  xml.ele("base64").txt(bytesToBase64(value));
 }

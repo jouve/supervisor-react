@@ -17,9 +17,8 @@ fi
 $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
-  --network=host \
-  -v $PWD:/srv \
   -w /srv \
+  --network=host \
   -it \
   alpine:3.15.0 sh -x -c '
 set -e
