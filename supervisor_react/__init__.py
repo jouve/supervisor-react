@@ -39,7 +39,7 @@ async def rpc2(request: Request):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('-V', '--version', action='version', version='0.2.3')
+    parser.add_argument('-V', '--version', action='version', version='0.2.4')
     parser.add_argument(
         '-v',
         '--verbose',
