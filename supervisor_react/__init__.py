@@ -1,4 +1,7 @@
 from argparse import ArgumentParser
+from contextlib import asynccontextmanager
+from functools import partial
+from typing import cast
 
 from httpx import AsyncClient
 from starlette.applications import Starlette
@@ -22,7 +25,7 @@ async def logtail(request: Request):
     return StreamingResponse(
         response.aiter_raw(),
         response.status_code,
-        response.headers,
+        cast(dict, response.headers),
         background=BackgroundTask(response.aclose),
     )
 
@@ -34,7 +37,14 @@ async def rpc2(request: Request):
         request.scope['path'],
         content=await request.body(),
     )
-    return Response(response.content, response.status_code, response.headers)
+    return Response(response.content, response.status_code, cast(dict, response.headers))
+
+
+@asynccontextmanager
+async def lifespan(app: Starlette, base_url: str):
+    async with AsyncClient(base_url=base_url) as client:
+        app.state.client = client
+        yield
 
 
 def main():
@@ -54,14 +64,18 @@ def main():
     )
     args = parser.parse_args()
 
-    app = Starlette(
-        args.verbose >= 1,
-        [
-            Route('/RPC2', rpc2, methods=['POST']),
-            Route('/logtail/{path:path}', logtail),
-            Route('/mainlogtail', logtail),
-            Mount('/', StaticFiles(packages=[__package__], html=True)),
-        ],
+    run(
+        Starlette(
+            args.verbose >= 1,
+            [
+                Route('/RPC2', rpc2, methods=['POST']),
+                Route('/logtail/{path:path}', logtail),
+                Route('/mainlogtail', logtail),
+                Mount('/', StaticFiles(packages=[__package__], html=True)),
+            ],
+            lifespan=partial(lifespan, base_url=args.supervisor),
+        ),
+        host=args.host,
+        port=args.port,
+        log_level=['info', 'debug', 'trace'][min(args.verbose, 2)],
     )
-    app.state.client = AsyncClient(base_url=args.supervisor)
-    run(app, host=args.host, port=args.port, log_level=['info', 'debug', 'trace'][min(args.verbose, 2)])

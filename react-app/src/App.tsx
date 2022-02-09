@@ -62,7 +62,7 @@ const AboutDialog = (props: any) => {
       <DialogContent dividers>
         <ul>
           <li>supervisor: {version}</li>
-          <li>supervisor-react: 0.2.3</li>
+          <li>supervisor-react: 0.2.4</li>
         </ul>
       </DialogContent>
     </Dialog>
