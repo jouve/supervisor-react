@@ -1,8 +1,8 @@
 {
   "name": "supervisor-react",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "private": true,
-  "proxy": "http://localhost:9001",
+  "proxy": "http://localhost:8888",
   "dependencies": {
     "@emotion/react": "*",
     "@emotion/styled": "*",
@@ -11,7 +11,6 @@
     "@testing-library/jest-dom": "*",
     "@testing-library/react": "*",
     "@testing-library/user-event": "*",
-    "@trysound/sax": "*",
     "@types/jest": "*",
     "@types/lodash": "*",
     "@types/node": "*",
@@ -22,8 +21,7 @@
     "react-dom": "*",
     "react-scripts": "*",
     "typescript": "*",
-    "web-vitals": "*",
-    "xmlbuilder2": "*"
+    "web-vitals": "*"
   },
   "scripts": {
     "start": "react-scripts start",

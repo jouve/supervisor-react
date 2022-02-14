@@ -10,8 +10,6 @@ lint:
 	bandit supervisor_react/*.py
 	pylint supervisor_react/*.py
 	mypy supervisor_react
-	#semgrep --config=p/ci supervisor_react
-	#semgrep --config=p/security-audit supervisor_react
 
 dist: supervisor_react/statics
 	poetry build

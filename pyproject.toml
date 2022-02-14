@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supervisor-react"
-version = "0.2.4"
+version = "0.3.0"
 description = "A web interface for supervisor"
 authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
@@ -39,7 +39,11 @@ line_length = 120
 profile = "black"
 
 [tool.pylint.messages_control]
-disable = "missing-function-docstring,missing-module-docstring"
+disable = [
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "missing-module-docstring",
+]
 
 [tool.pylint.format]
 max-line-length = "120"

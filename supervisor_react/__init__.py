@@ -1,13 +1,14 @@
+import xmlrpc.client
 from argparse import ArgumentParser
 from contextlib import asynccontextmanager
 from functools import partial
-from typing import cast
+from typing import List, TypedDict, cast
 
 from httpx import AsyncClient
 from starlette.applications import Starlette
 from starlette.background import BackgroundTask
 from starlette.requests import Request
-from starlette.responses import Response, StreamingResponse
+from starlette.responses import JSONResponse, StreamingResponse
 from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 from uvicorn import run  # type: ignore
@@ -30,14 +31,20 @@ async def logtail(request: Request):
     )
 
 
+class JsonXmlRpc(TypedDict):
+    params: List[str]
+    methodname: str
+
+
 async def rpc2(request: Request):
     client: AsyncClient = request.app.state.client
+    data: JsonXmlRpc = await request.json()
     response = await client.request(
         request.method,
         request.scope['path'],
-        content=await request.body(),
+        content=xmlrpc.client.dumps(tuple(data['params']), data['methodname']),
     )
-    return Response(response.content, response.status_code, cast(dict, response.headers))
+    return JSONResponse(xmlrpc.client.loads(response.text, use_builtin_types=True)[0][0])
 
 
 @asynccontextmanager
@@ -49,7 +56,7 @@ async def lifespan(app: Starlette, base_url: str):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('-V', '--version', action='version', version='0.2.4')
+    parser.add_argument('-V', '--version', action='version', version='0.3.0')
     parser.add_argument(
         '-v',
         '--verbose',

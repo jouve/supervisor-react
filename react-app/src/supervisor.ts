@@ -1,6 +1,3 @@
-
-import {XmlRpcClient} from "./xmlrpc";
-
 export enum ProcessStates {
   STOPPED = 0,
   STARTING = 10,
@@ -46,18 +43,24 @@ export interface ProcessInfo {
 }
 
 export class Supervisor {
-  client: XmlRpcClient;
   setProcesses: any;
 
   constructor(setProcesses: any) {
-    this.client = new XmlRpcClient(`${window.location.origin}/RPC2`)
     this.setProcesses = setProcesses;
   }
 
-  methodCall = (method: string, params: string[]): Promise<any> =>
-    this.client.methodCall(method, params)
+  methodCall = async (method: string, params: string[]): Promise<any> =>
+    await (
+      await fetch(`${window.location.origin}/RPC2`, {
+        method: "POST",
+        body: JSON.stringify({
+          params: params,
+          methodname: method,
+        }),
+      })
+    ).json();
 
-  getSupervisorVersion = () => this.methodCall("supervisor.getSupervisorVersion", []) as Promise<string>;
+  getSupervisorVersion = async () => (await this.methodCall("supervisor.getSupervisorVersion", [])) as string;
 
   getState = async () => ((await this.methodCall("supervisor.getState", [])) as State).statename;
 
