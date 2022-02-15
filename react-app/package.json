@@ -20,8 +20,7 @@
     "react": "*",
     "react-dom": "*",
     "react-scripts": "*",
-    "typescript": "*",
-    "web-vitals": "*"
+    "typescript": "*"
   },
   "scripts": {
     "start": "react-scripts start",
