@@ -8,8 +8,8 @@ if [ "$(basename "$(readlink -f "$(which docker)")")" != podman ]; then
   fi
 fi
 
-if docker container inspect cache_cache_1 &>/dev/null; then
-  cache=--volumes-from=cache_cache_1
+if docker container inspect cache-cache-1 &>/dev/null; then
+  cache=--volumes-from=cache-cache-1
 else
   cache=
 fi
