@@ -123,7 +123,7 @@ unicode_backport = ["unicodedata2"]
 
 [[package]]
 name = "click"
-version = "8.0.3"
+version = "8.0.4"
 description = "Composable command line interface toolkit"
 category = "main"
 optional = false
@@ -503,7 +503,7 @@ python-versions = "*"
 
 [[package]]
 name = "uvicorn"
-version = "0.17.4"
+version = "0.17.5"
 description = "The lightning-fast ASGI server."
 category = "main"
 optional = false
@@ -589,8 +589,8 @@ charset-normalizer = [
     {file = "charset_normalizer-2.0.12-py3-none-any.whl", hash = "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"},
 ]
 click = [
-    {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
-    {file = "click-8.0.3.tar.gz", hash = "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"},
+    {file = "click-8.0.4-py3-none-any.whl", hash = "sha256:6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1"},
+    {file = "click-8.0.4.tar.gz", hash = "sha256:8458d7b1287c5fb128c90e23381cf99dcde74beaf6c7ff6384ce84d6fe090adb"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
@@ -811,8 +811,8 @@ untokenize = [
     {file = "untokenize-0.1.1.tar.gz", hash = "sha256:3865dbbbb8efb4bb5eaa72f1be7f3e0be00ea8b7f125c69cbd1f5fda926f37a2"},
 ]
 uvicorn = [
-    {file = "uvicorn-0.17.4-py3-none-any.whl", hash = "sha256:e85872d84fb651cccc4c5d2a71cf7ead055b8fb4d8f1e78e36092282c0cf2aec"},
-    {file = "uvicorn-0.17.4.tar.gz", hash = "sha256:25850bbc86195a71a6477b3e4b3b7b4c861fb687fb96912972ce5324472b1011"},
+    {file = "uvicorn-0.17.5-py3-none-any.whl", hash = "sha256:8adddf629b79857b48b999ae1b14d6c92c95d4d7840bd86461f09bee75f1653e"},
+    {file = "uvicorn-0.17.5.tar.gz", hash = "sha256:c04a9c069111489c324f427501b3840d306c6b91a77b00affc136a840a3f45f1"},
 ]
 wrapt = [
     {file = "wrapt-1.13.3-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:e05e60ff3b2b0342153be4d1b597bbcfd8330890056b9619f4ad6b8d5c96a81a"},
