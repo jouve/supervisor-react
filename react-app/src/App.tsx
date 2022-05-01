@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import _ from "lodash";
 
@@ -63,6 +63,7 @@ const AboutDialog = (props: any) => {
         <ul>
           <li>supervisor: {version}</li>
           <li>supervisor-react: 0.3.0</li>
+          <li>react: {React.version}</li>
         </ul>
       </DialogContent>
     </Dialog>
