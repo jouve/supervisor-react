@@ -2,7 +2,7 @@ import xmlrpc.client
 from argparse import ArgumentParser
 from contextlib import asynccontextmanager
 from functools import partial
-from typing import List, TypedDict, cast
+from typing import List, TypedDict
 
 from httpx import AsyncClient
 from starlette.applications import Starlette
@@ -26,7 +26,7 @@ async def logtail(request: Request):
     return StreamingResponse(
         response.aiter_raw(),
         response.status_code,
-        cast(dict, response.headers),
+        response.headers,
         background=BackgroundTask(response.aclose),
     )
 
