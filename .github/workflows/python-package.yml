@@ -30,8 +30,6 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry
         poetry install
-    - name: unify
-      run: poetry run unify --recursive --check-only supervisor_react
     - name: isort
       run: poetry run isort --check-only supervisor_react
     - name: black
