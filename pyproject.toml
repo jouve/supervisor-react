@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supervisor-react"
-version = "0.4.1"
+version = "0.5.1"
 description = "A web interface for supervisor"
 authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
@@ -18,21 +18,23 @@ httpx = "*"
 starlette = "*"
 uvicorn = "*"
 
-[tool.poetry.dev-dependencies]
-bandit = "*"
+[tool.poetry.group.dev.dependencies]
+bandit = {extras = ["toml"], version = "*"}
 black = "*"
-flake8-assertive = "*"
 flake8-bugbear = "*"
-flake8-comprehensions = "*"
+flake8-pyproject = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
 supervisor = "*"
-unify = "*"
+
+[tool.bandit]
 
 [tool.black]
 line-length = 120
-skip-string-normalization = true
+
+[tool.flake8]
+max-line-length = 120
 
 [tool.isort]
 line_length = 120

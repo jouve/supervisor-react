@@ -19,7 +19,7 @@ async def logtail(request: Request):
     response = await client.send(
         client.build_request(
             request.method,
-            request.scope['path'],
+            request.scope["path"],
         ),
         stream=True,
     )
@@ -41,8 +41,8 @@ async def rpc2(request: Request):
     data: JsonXmlRpc = await request.json()
     response = await client.request(
         request.method,
-        request.scope['path'],
-        content=xmlrpc.client.dumps(tuple(data['params']), data['methodname']),
+        request.scope["path"],
+        content=xmlrpc.client.dumps(tuple(data["params"]), data["methodname"]),
     )
     return JSONResponse(xmlrpc.client.loads(response.text, use_builtin_types=True)[0][0])
 
@@ -56,18 +56,18 @@ async def lifespan(app: Starlette, base_url: str):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('-V', '--version', action='version', version='0.3.0')
+    parser.add_argument("-V", "--version", action="version", version="0.3.0")
     parser.add_argument(
-        '-v',
-        '--verbose',
-        action='count',
+        "-v",
+        "--verbose",
+        action="count",
         default=0,
-        help='Verbose mode. Multiple -v options increase the verbosity. The maximum is 2.',
+        help="Verbose mode. Multiple -v options increase the verbosity. The maximum is 2.",
     )
-    parser.add_argument('-H', '--host', default='localhost', help='Bind socket to this host. default: %(default)s')
-    parser.add_argument('-p', '--port', type=int, default=8888, help='Bind socket to this port. default: %(default)s')
+    parser.add_argument("-H", "--host", default="localhost", help="Bind socket to this host. default: %(default)s")
+    parser.add_argument("-p", "--port", type=int, default=8888, help="Bind socket to this port. default: %(default)s")
     parser.add_argument(
-        '-s', '--supervisor', default='http://localhost:9001', help='Supervisor rpc interface. default: %(default)s'
+        "-s", "--supervisor", default="http://localhost:9001", help="Supervisor rpc interface. default: %(default)s"
     )
     args = parser.parse_args()
 
@@ -75,14 +75,14 @@ def main():
         Starlette(
             args.verbose >= 1,
             [
-                Route('/RPC2', rpc2, methods=['POST']),
-                Route('/logtail/{path:path}', logtail),
-                Route('/mainlogtail', logtail),
-                Mount('/', StaticFiles(packages=[__package__], html=True)),
+                Route("/RPC2", rpc2, methods=["POST"]),
+                Route("/logtail/{path:path}", logtail),
+                Route("/mainlogtail", logtail),
+                Mount("/", StaticFiles(packages=[__package__], html=True)),
             ],
             lifespan=partial(lifespan, base_url=args.supervisor),
         ),
         host=args.host,
         port=args.port,
-        log_level=['info', 'debug', 'trace'][min(args.verbose, 2)],
+        log_level=["info", "debug", "trace"][min(args.verbose, 2)],
     )

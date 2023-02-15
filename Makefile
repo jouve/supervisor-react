@@ -1,14 +1,13 @@
 all: dist
 
 fmt:
-	unify --in-place --recursive supervisor_react
 	isort supervisor_react
 	black supervisor_react
 
 lint:
-	flake8 --append-config pyproject.toml supervisor_react/*.py
-	bandit supervisor_react/*.py
-	pylint supervisor_react/*.py
+	flake8 supervisor_react
+	bandit -c pyproject.toml -r supervisor_react
+	pylint supervisor_react
 	mypy supervisor_react
 
 dist: supervisor_react/statics
