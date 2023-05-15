@@ -15,8 +15,6 @@ jobs:
     strategy:
       matrix:
         python-version:
-        - '3.9'
-        - '3.10'
         - '3.11'
 
     steps:
@@ -36,6 +34,8 @@ jobs:
       run: poetry run black --check supervisor_react
     - name: flake8
       run: poetry run flake8 supervisor_react
+    - name: ruff
+      run: poetry run ruff supervisor_react
     - name: bandit
       run: poetry run bandit -c pyproject.toml -r supervisor_react
     - name: pylint
