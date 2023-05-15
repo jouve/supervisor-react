@@ -20,7 +20,7 @@ $SUDO docker run \
   -w /srv \
   --network=host \
   -it \
-  alpine:3.15.0 sh -x -c '
+  alpine:3.18.0 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk

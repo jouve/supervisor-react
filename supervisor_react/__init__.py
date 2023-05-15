@@ -2,7 +2,7 @@ import xmlrpc.client
 from argparse import ArgumentParser
 from contextlib import asynccontextmanager
 from functools import partial
-from typing import List, TypedDict
+from typing import TypedDict
 
 from httpx import AsyncClient
 from starlette.applications import Starlette
@@ -11,7 +11,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, StreamingResponse
 from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
-from uvicorn import run  # type: ignore
+from uvicorn import run
 
 
 async def logtail(request: Request):
@@ -32,7 +32,7 @@ async def logtail(request: Request):
 
 
 class JsonXmlRpc(TypedDict):
-    params: List[str]
+    params: list[str]
     methodname: str
 
 

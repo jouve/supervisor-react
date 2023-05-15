@@ -5,6 +5,7 @@ fmt:
 	black supervisor_react
 
 lint:
+	ruff supervisor_react
 	flake8 supervisor_react
 	bandit -c pyproject.toml -r supervisor_react
 	pylint supervisor_react

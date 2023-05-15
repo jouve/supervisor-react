@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supervisor-react"
-version = "0.5.1"
+version = "0.6.0"
 description = "A web interface for supervisor"
 authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
@@ -12,7 +12,7 @@ include = ["supervisor_react/statics/**/*"]
 supervisor-react = "supervisor_react:main"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 aiofiles = "*"
 httpx = "*"
 starlette = "*"
@@ -26,6 +26,7 @@ flake8-pyproject = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
+ruff = "*"
 supervisor = "*"
 
 [tool.bandit]
@@ -48,7 +49,10 @@ disable = [
 ]
 
 [tool.pylint.format]
-max-line-length = "120"
+max-line-length = 120
+
+[tool.ruff]
+line-length = 120
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
