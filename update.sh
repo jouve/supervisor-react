@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-sudo nerdctl run \
+docker run \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -w /srv \
-  jouve/poetry:1.4.2-alpine3.18.0 poetry lock
+  jouve/poetry:1.6.1 poetry lock

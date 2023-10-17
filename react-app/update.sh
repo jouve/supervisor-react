@@ -1,9 +1,9 @@
 #!/bin/bash -x
 
-sudo nerdctl run \
+docker run \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -w /opt \
-  alpine:3.18.0 sh -x -c '
+  alpine:3.18.3 sh -x -c '
 set -e
 apk add --no-cache alpine-conf
 setup-apkcache /var/cache/apk

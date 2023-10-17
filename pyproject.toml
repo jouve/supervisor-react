@@ -21,8 +21,6 @@ uvicorn = "*"
 [tool.poetry.group.dev.dependencies]
 bandit = {extras = ["toml"], version = "*"}
 black = "*"
-flake8-bugbear = "*"
-flake8-pyproject = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
