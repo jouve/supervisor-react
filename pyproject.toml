@@ -19,38 +19,20 @@ starlette = "*"
 uvicorn = "*"
 
 [tool.poetry.group.dev.dependencies]
-bandit = {extras = ["toml"], version = "*"}
-black = "*"
-isort = "*"
 mypy = "*"
-pylint = "*"
 ruff = "*"
 supervisor = "*"
 
-[tool.bandit]
-
-[tool.black]
-line-length = 120
-
-[tool.flake8]
-max-line-length = 120
-
-[tool.isort]
-line_length = 120
-profile = "black"
-
-[tool.pylint.messages_control]
-disable = [
-    "missing-class-docstring",
-    "missing-function-docstring",
-    "missing-module-docstring",
-]
-
-[tool.pylint.format]
-max-line-length = 120
-
 [tool.ruff]
 line-length = 120
+
+[tool.ruff.lint]
+extend-select = [ "ALL" ]
+extend-ignore = [
+    "COM812",
+    "D", 
+    "ISC001",
+]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
