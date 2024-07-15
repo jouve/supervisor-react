@@ -30,6 +30,6 @@ jobs:
         python -m pip install poetry
         poetry install
     - name: ruff
-      run: poetry run ruff supervisor_react
+      run: poetry run ruff check supervisor_react
     - name: mypy
       run: poetry run mypy supervisor_react
