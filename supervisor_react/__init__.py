@@ -62,7 +62,7 @@ async def lifespan(app: Starlette, base_url: str) -> AsyncGenerator[None, None]:
 
 def main() -> int:
     parser = ArgumentParser()
-    parser.add_argument("-V", "--version", action="version", version="0.3.0")
+    parser.add_argument("-V", "--version", action="version", version="0.7.0")
     parser.add_argument(
         "-v",
         "--verbose",

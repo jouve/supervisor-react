@@ -26,6 +26,7 @@ import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import {version as MuiVersion} from "@mui/material/version";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -61,9 +62,10 @@ const AboutDialog = (props: any) => {
       <DialogTitle>About</DialogTitle>
       <DialogContent dividers>
         <ul>
+          <li>supervisor-react: 0.7.0</li>
           <li>supervisor: {version}</li>
-          <li>supervisor-react: 0.3.0</li>
           <li>react: {React.version}</li>
+          <li>mui: {MuiVersion}</li>
         </ul>
       </DialogContent>
     </Dialog>

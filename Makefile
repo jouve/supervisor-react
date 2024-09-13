@@ -1,13 +1,12 @@
 all: dist
 
 fmt:
-	isort supervisor_react
-	black supervisor_react
+	ruff check --fix supervisor_react
+	ruff format supervisor_react
 
 lint:
-	ruff supervisor_react
-	bandit -c pyproject.toml -r supervisor_react
-	pylint supervisor_react
+	ruff check supervisor_react
+	ruff format --check supervisor_react
 	mypy supervisor_react
 
 dist: supervisor_react/statics

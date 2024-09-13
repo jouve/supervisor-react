@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supervisor-react"
-version = "0.6.0"
+version = "0.7.0"
 description = "A web interface for supervisor"
 authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
 license = "GPL-3.0-only"
@@ -30,7 +30,7 @@ line-length = 120
 extend-select = [ "ALL" ]
 extend-ignore = [
     "COM812",
-    "D", 
+    "D",
     "ISC001",
 ]
 
