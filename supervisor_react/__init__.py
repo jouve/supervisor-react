@@ -60,7 +60,8 @@ async def lifespan(app: Starlette, base_url: str) -> AsyncGenerator[None, None]:
         yield
 
 
-def main() -> int:
+
+def main() -> None:
     parser = ArgumentParser()
     parser.add_argument("-V", "--version", action="version", version="0.7.0")
     parser.add_argument(
@@ -87,13 +88,11 @@ def main() -> int:
                 Route("/RPC2", rpc2, methods=["POST"]),
                 Route("/logtail/{path:path}", logtail),
                 Route("/mainlogtail", logtail),
-                Mount("/", StaticFiles(packages=[__package__], html=True)),
+                Mount("/", StaticFiles(packages=[str(__package__)], html=True)),
             ],
             lifespan=partial(lifespan, base_url=args.supervisor),
         ),
         host=args.host,
         port=args.port,
-        log_level=["info", "debug", "trace"][min(args.verbose, 2)],
+        log_level=["info", "debug", "trace"][min(int(args.verbose), 2)],
     )
-
-    return 0

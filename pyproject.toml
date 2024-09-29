@@ -19,7 +19,7 @@ starlette = "*"
 uvicorn = "*"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "*"
+pyright = "*"
 ruff = "*"
 supervisor = "*"
 
@@ -29,6 +29,7 @@ line-length = 120
 [tool.ruff.lint]
 extend-select = [ "ALL" ]
 extend-ignore = [
+    "ANN201",
     "COM812",
     "D",
     "ISC001",
