@@ -31,5 +31,5 @@ jobs:
         poetry install
     - name: ruff
       run: poetry run ruff check supervisor_react
-    - name: mypy
-      run: poetry run mypy supervisor_react
+    - name: pyright
+      run: poetry run pyright supervisor_react
