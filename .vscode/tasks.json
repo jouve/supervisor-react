@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "npm: build - react-app",
+			"type": "npm",
+			"script": "build",
+			"path": "react-app",
+			"group": {
+				"kind": "build",
+			},
+			"detail": "react-scripts build",
+		},
+		{
+			"label": "python: build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"type": "shell",
+			"command": "rm -rf supervisor_react/statics; cp -r react-app/build supervisor_react/statics; poetry build",
+			"dependsOn": ["npm: build - react-app"]
+		}
+	]
+}

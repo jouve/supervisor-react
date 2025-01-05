@@ -3,12 +3,12 @@ name: CodeQL
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
     branches:
-    - master
+      - master
   schedule:
-  - cron: 45 3 * * 1
+    - cron: 45 3 * * 1
 
 jobs:
   analyze:
@@ -19,17 +19,17 @@ jobs:
       fail-fast: false
       matrix:
         language:
-        - javascript
-        - python
+          - javascript
+          - python
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

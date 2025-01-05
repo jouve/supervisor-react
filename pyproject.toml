@@ -1,22 +1,21 @@
-[tool.poetry]
+[project]
 name = "supervisor-react"
 version = "0.8.0"
 description = "A web interface for supervisor"
-authors = ["Cyril Jouve <jv.cyril@gmail.com>"]
-license = "GPL-3.0-only"
 readme = "README.md"
-repository = "https://github.com/jouve/supervisor-react"
-include = ["supervisor_react/statics/**/*"]
+requires-python = "^3.11"
+license = "GPL-3.0-only"
+authors = [{ name = "Cyril Jouve", email = "jv.cyril@gmail.com" }]
+dependencies = ["aiofiles", "httpx", "starlette", "uvicorn"]
 
-[tool.poetry.scripts]
+[project.urls]
+source = "https://github.com/jouve/supervisor-react"
+
+[project.scripts]
 supervisor-react = "supervisor_react:main"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-aiofiles = "*"
-httpx = "*"
-starlette = "*"
-uvicorn = "*"
+[tool.poetry]
+include = ["supervisor_react/statics/**/*"]
 
 [tool.poetry.group.dev.dependencies]
 pyright = "*"
@@ -27,13 +26,8 @@ supervisor = "*"
 line-length = 120
 
 [tool.ruff.lint]
-extend-select = [ "ALL" ]
-extend-ignore = [
-    "ANN201",
-    "COM812",
-    "D",
-    "ISC001",
-]
+extend-select = ["ALL"]
+extend-ignore = ["ANN201", "COM812", "D", "ISC001"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

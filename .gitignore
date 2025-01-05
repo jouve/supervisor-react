@@ -2,7 +2,6 @@
 .mypy_cache
 .scannerwork
 .tox
-.vscode
 __pycache__
 dist
 statics

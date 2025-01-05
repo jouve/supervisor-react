@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Supervisord",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "supervisor.supervisord",
+            "args": ["-n"],
+            "cwd": "${workspaceFolder}/tests",
+        },
+        {
+            "name": "Python: supervisor_react",
+            "module": "supervisor_react",
+            "request": "launch",
+            "type": "debugpy",
+        },
+        {
+            "name": "Node: react-app",
+            "command": "npm start",
+            "cwd": "${workspaceFolder}/react-app",
+            "request": "launch",
+            "type": "node-terminal",
+        },
+    ]
+}

@@ -3,33 +3,33 @@ name: Python package
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version:
-        - '3.11'
-        - '3.12'
+          - "3.11"
+          - "3.12"
+          - "3.13"
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install poetry
-        poetry install
-    - name: ruff
-      run: poetry run ruff check supervisor_react
-    - name: pyright
-      run: poetry run pyright supervisor_react
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+          poetry install
+      - name: ruff
+        run: poetry run ruff check supervisor_react
+      - name: pyright
+        run: poetry run pyright supervisor_react

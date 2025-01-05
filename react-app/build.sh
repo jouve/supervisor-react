@@ -18,11 +18,7 @@ $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -w /srv \
-  alpine:3.20.1 sh -x -c '
-set -e
-apk add --no-cache alpine-conf
-setup-apkcache /var/cache/apk
-apk add --no-cache npm
+  node:23.5.0-bookworm sh -e -x -c '
 npm install
 npm run build
 '
