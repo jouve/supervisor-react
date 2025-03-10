@@ -12,7 +12,7 @@
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers/features/python:1": {
-			"toolsToInstall": "poetry"
+			"toolsToInstall": "uv"
 		}
 	},
 	// Configure tool-specific properties.
@@ -20,6 +20,7 @@
 		"vscode": {
 			"extensions": [
 				"charliermarsh.ruff",
+				"DavidAnson.vscode-markdownlint",
 				"GitHub.vscode-github-actions",
 				"tamasfe.even-better-toml"
 			]
