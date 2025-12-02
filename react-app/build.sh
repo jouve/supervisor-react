@@ -18,7 +18,7 @@ $SUDO docker run \
   $cache \
   -v "$(readlink -f "$(dirname "$0")")":/srv \
   -w /srv \
-  node:23.5.0-bookworm sh -e -x -c '
+  node:25.2.1-bookworm sh -e -x -c '
 npm install
 npm run build
 '
