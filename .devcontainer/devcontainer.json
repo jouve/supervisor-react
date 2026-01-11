@@ -9,10 +9,11 @@
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"configureZshAsDefaultShell": true
 		},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers/features/python:1": {
-			"toolsToInstall": "uv"
+			"toolsToInstall": "pre-commit-docker,uv"
 		}
 	},
 	// Configure tool-specific properties.

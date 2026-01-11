@@ -1,0 +1,4 @@
+autodiscovery:
+  crawlers:
+    npm:
+      rootdir: react-app

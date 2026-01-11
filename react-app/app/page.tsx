@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 
 import _ from "lodash";
@@ -9,10 +11,10 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import Dialog from "@mui/material/Dialog";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -26,7 +28,7 @@ import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import {version as MuiVersion} from "@mui/material/version";
+import { version as MuiVersion } from "@mui/material/version";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -38,7 +40,7 @@ import StopIcon from "@mui/icons-material/Stop";
 
 import { ProcessInfo, ProcessStates, RUNNING_STATES, Supervisor } from "./supervisor";
 
-const TooltipIconButton = (props: any) => {
+const TooltipIconButton = (props: { title: string } & IconButtonProps) => {
   const { title, ...rest } = props;
   return (
     <Tooltip title={title}>
@@ -49,7 +51,7 @@ const TooltipIconButton = (props: any) => {
   );
 };
 
-const AboutDialog = (props: any) => {
+const AboutDialog = (props: { supervisor: Supervisor } & DialogProps) => {
   const { supervisor, ...rest } = props;
   const [version, setVersion] = useState("");
 
@@ -101,7 +103,7 @@ const SupervisorAppBar = ({ supervisor }: { supervisor: Supervisor }) => {
             Supervisor
           </Typography>
           <Tooltip title="Reload Supervisor">
-            <IconButton color="inherit" onClick={(e) => supervisor.getAllProcessInfo()}>
+            <IconButton color="inherit" onClick={(_e) => supervisor.getAllProcessInfo()}>
               <ReplayIcon />
             </IconButton>
           </Tooltip>
@@ -179,8 +181,8 @@ const GroupSummary = ({
                       byState.FATAL > 0
                         ? "error.main"
                         : byState.RUNNING === processes.length
-                        ? "success.main"
-                        : "warning.main",
+                          ? "success.main"
+                          : "warning.main",
                   }}
                 >
                   {byState.RUNNING}/{processes.length}
@@ -196,7 +198,7 @@ const GroupSummary = ({
                   size="small"
                   title="Stop Group"
                   color="primary"
-                  onClick={(e: any) => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     supervisor.stopProcessGroup(value);
                   }}
@@ -208,7 +210,7 @@ const GroupSummary = ({
                   size="small"
                   title="Start Group"
                   color="primary"
-                  onClick={(e: any) => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     supervisor.startProcessGroup(value);
                   }}
@@ -220,7 +222,7 @@ const GroupSummary = ({
                   size="small"
                   title="Restart Group"
                   color="primary"
-                  onClick={(e: any) => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     supervisor.restartProcessGroup(value);
                   }}
@@ -251,8 +253,8 @@ const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) 
             RUNNING_STATES.includes(process.state)
               ? "success.main"
               : process.state === ProcessStates.FATAL
-              ? "error.main"
-              : "warning.main"
+                ? "error.main"
+                : "warning.main"
           }
         >
           {process.statename}
@@ -275,7 +277,7 @@ const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) 
           size="small"
           title="Restart"
           color="primary"
-          onClick={(e: any) => props.supervisor.restartProcess(process)}
+          onClick={(_e) => props.supervisor.restartProcess(process)}
         >
           <LoopIcon fontSize="small" />
         </TooltipIconButton>
@@ -319,7 +321,7 @@ const Group = (props: { value: string; processes: ProcessInfo[]; supervisor: Sup
   );
 };
 
-const App = () => {
+export default function Home() {
   const [processes, setProcesses] = useState([] as ProcessInfo[]);
   const supervisor = new Supervisor(setProcesses);
 
@@ -343,6 +345,4 @@ const App = () => {
       </Container>
     </>
   );
-};
-
-export default App;
+}

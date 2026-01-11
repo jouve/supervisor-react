@@ -9,7 +9,7 @@
 			"group": {
 				"kind": "build",
 			},
-			"detail": "react-scripts build",
+			"detail": "next build",
 		},
 		{
 			"label": "python: build",
@@ -18,8 +18,10 @@
 				"isDefault": true
 			},
 			"type": "shell",
-			"command": "rm -rf supervisor_react/statics; cp -r react-app/build supervisor_react/statics; uv build",
-			"dependsOn": ["npm: build - react-app"]
+			"command": "rm -rf supervisor_react/statics; cp -r react-app/out supervisor_react/statics; uv build",
+			"dependsOn": [
+				"npm: build - react-app"
+			]
 		}
 	]
 }

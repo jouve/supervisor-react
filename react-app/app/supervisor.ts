@@ -43,12 +43,13 @@ export interface ProcessInfo {
 }
 
 export class Supervisor {
-  setProcesses: any;
+  setProcesses: React.Dispatch<React.SetStateAction<ProcessInfo[]>>;
 
-  constructor(setProcesses: any) {
+  constructor(setProcesses: React.Dispatch<React.SetStateAction<ProcessInfo[]>>) {
     this.setProcesses = setProcesses;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   methodCall = async (method: string, params: string[]): Promise<any> =>
     await (
       await fetch(`${window.location.origin}/RPC2`, {

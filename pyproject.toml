@@ -40,6 +40,11 @@ artifacts = [
     "statics",
 ]
 
+[tool.hatch.build.targets.wheel]
+artifacts = [
+    "statics",
+]
+
 [tool.ruff]
 line-length = 120
 
