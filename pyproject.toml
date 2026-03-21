@@ -23,9 +23,9 @@ supervisor-react = "supervisor_react:main"
 
 [dependency-groups]
 dev = [
-    "pyright",
     "ruff",
     "supervisor",
+    "ty",
 ]
 
 [build-system]
