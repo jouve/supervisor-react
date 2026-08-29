@@ -283,9 +283,13 @@ const ProcessDetail = (props: { process: ProcessInfo; supervisor: Supervisor }) 
         </TooltipIconButton>
       </TableCell>
       <TableCell width={113}>
-        <Link href={`logtail/${process.group}:${process.name}`}>stdout</Link>
+        <Link href={`logtail/${process.group}:${process.name}`} target="_blank" rel="noopener">
+          stdout
+        </Link>
         &nbsp;
-        <Link href={`logtail/${process.group}:${process.name}/stderr`}>stderr</Link>
+        <Link href={`logtail/${process.group}:${process.name}/stderr`} target="_blank" rel="noopener">
+          stderr
+        </Link>
       </TableCell>
     </TableRow>
   );

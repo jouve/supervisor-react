@@ -21,7 +21,7 @@ Browser → Next.js (dev) or Starlette (prod)
 ### Python Backend (`supervisor_react/__init__.py`)
 Single file with three routes:
 - `POST /RPC2` — accepts JSON `{methodname, params}`, serializes to XML-RPC, forwards to supervisord, returns deserialized JSON
-- `GET /logtail/{path}` and `/mainlogtail` — streaming proxy using httpx
+- `GET /logtail/{path}` and `/mainlogtail` — streaming proxy using niquests
 - `Mount /` — serves the static Next.js export as package data
 
 The supervisord base URL is passed at startup via `-s/--supervisor` (default `http://localhost:9001`).

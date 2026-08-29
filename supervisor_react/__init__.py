@@ -4,9 +4,9 @@ import xmlrpc.client
 from argparse import ArgumentParser
 from contextlib import asynccontextmanager
 from functools import partial
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypedDict, cast
 
-from httpx import AsyncClient
+from niquests import AsyncSession
 from starlette.applications import Starlette
 from starlette.background import BackgroundTask
 from starlette.responses import JSONResponse, StreamingResponse
@@ -21,19 +21,14 @@ if TYPE_CHECKING:
 
 
 async def logtail(request: Request) -> StreamingResponse:
-    client: AsyncClient = request.app.state.client
-    response = await client.send(
-        client.build_request(
-            request.method,
-            request.scope["path"],
-        ),
-        stream=True,
-    )
+    client: AsyncSession = request.app.state.client
+    response = await client.request(request.method, request.scope["path"], stream=True)
+    content = await response.iter_content()
     return StreamingResponse(
-        response.aiter_raw(),
-        response.status_code,
+        content,
+        cast("int", response.status_code),
         response.headers,
-        background=BackgroundTask(response.aclose),
+        background=BackgroundTask(response.close),
     )
 
 
@@ -43,19 +38,19 @@ class JsonXmlRpc(TypedDict):
 
 
 async def rpc2(request: Request) -> JSONResponse:
-    client: AsyncClient = request.app.state.client
+    client: AsyncSession = request.app.state.client
     data: JsonXmlRpc = await request.json()
     response = await client.request(
         request.method,
         request.scope["path"],
-        content=xmlrpc.client.dumps(tuple(data["params"]), data["methodname"]),
+        data=xmlrpc.client.dumps(tuple(data["params"]), data["methodname"]),
     )
-    return JSONResponse(xmlrpc.client.loads(response.text, use_builtin_types=True)[0][0])
+    return JSONResponse(xmlrpc.client.loads(cast("str", response.text), use_builtin_types=True)[0][0])
 
 
 @asynccontextmanager
 async def lifespan(app: Starlette, base_url: str) -> AsyncGenerator[None, None]:
-    async with AsyncClient(base_url=base_url) as client:
+    async with AsyncSession(base_url=base_url) as client:
         app.state.client = client
         yield
 

@@ -10,7 +10,7 @@ authors = [
 ]
 dependencies = [
     "aiofiles",
-    "httpx",
+    "niquests",
     "starlette",
     "uvicorn",
 ]

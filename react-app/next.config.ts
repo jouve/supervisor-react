@@ -11,8 +11,8 @@ module.exports = (phase: string, { defaultConfig }: { defaultConfig: NextConfig 
           destination: "http://localhost:8888/RPC2",
         },
         {
-          source: "/logtail/{path*}",
-          destination: "http://localhost:8888/logtail/{path*}",
+          source: "/logtail/:path*",
+          destination: "http://localhost:8888/logtail/:path*",
         }
       ]
     }

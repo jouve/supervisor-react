@@ -5,3 +5,4 @@ autodiscovery:
         github.com:
           kind: github
           token: '{{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}'
+      digest: false
